@@ -11,13 +11,20 @@ module.exports = async (req, res) => {
       });
       const data = await response.json();
       
-      // Временно возвращаем то, что пришло от Supabase
-      console.log('Raw data from Supabase:', data);
-      return res.json(data); 
+      // Исправляем: поле называется "key", а не "cat_key"
+      const result = {};
+      data.forEach(cat => {
+        if (cat.key && cat.name) {
+          result[cat.key] = cat.name;
+        }
+      });
+      
+      console.log('Categories sent to frontend:', result);
+      return res.json(result);
     } catch (error) {
-      return res.status(500).json({ error: error.message });
+      return res.json({});
     }
   }
 
-  return res.json([]);
+  return res.json({});
 };
