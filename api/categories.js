@@ -7,32 +7,25 @@ module.exports = async (req, res) => {
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   if (req.method === 'OPTIONS') return res.status(200).end();
 
-  const headers = {
-    'apikey': supabaseKey,
-    'Authorization': `Bearer ${supabaseKey}`,
-    'Content-Type': 'application/json'
-  };
-
   if (req.method === 'GET') {
     try {
-      const response = await fetch(`${supabaseUrl}/rest/v1/categories?select=*`, { headers });
+      const response = await fetch(`${supabaseUrl}/rest/v1/categories?select=*`, {
+        headers: { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}` }
+      });
       const data = await response.json();
-      console.log('Supabase categories data:', data);
       
-      const categories = {};
+      // Преобразуем массив в объект { "wedding": "Свадебные" }
+      const result = {};
       if (Array.isArray(data)) {
         data.forEach(cat => {
-          // Проверяем ВСЕ возможные варианты имен полей
-          const key = cat.cat_key || cat.key || cat.catKey;
-          const name = cat.name;
-          if (key && name) {
-            categories[key] = name;
+          if (cat.cat_key && cat.name) {
+            result[cat.cat_key] = cat.name;
           }
         });
       }
       
-      console.log('Returning categories:', categories);
-      return res.json(categories);
+      console.log('Categories sent to frontend:', result);
+      return res.json(result);
     } catch (error) {
       return res.status(500).json({ error: error.message });
     }
@@ -46,12 +39,15 @@ module.exports = async (req, res) => {
     try {
       const response = await fetch(`${supabaseUrl}/rest/v1/categories`, {
         method: 'POST',
-        headers: { ...headers, 'Prefer': 'return=representation' },
+        headers: { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}`, 'Content-Type': 'application/json', 'Prefer': 'return=representation' },
         body: JSON.stringify([{ cat_key, name }])
       });
-      
-      const responseText = await response.text();
-      console.log('Supabase POST response:', response.status, responseText);
-      
-      if (!response.ok) {
-        return res.status(response.status).json({ error:
+      const data = await response.json();
+      return res.json(data[0]);
+    } catch (error) {
+      return res.status(500).json({ error: error.message });
+    }
+  }
+
+  return res.status(405).json({ error: 'Method not allowed' });
+};
