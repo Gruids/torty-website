@@ -26,14 +26,25 @@ module.exports = async (req, res) => {
   if (req.method === 'POST') {
     const { name, category, description, fill, price, similar_ids, image } = req.body;
     if (!name || !price) return res.status(400).json({ error: 'Name and price required' });
-    
+
     try {
+      const cakeData = {
+        name,
+        category: category || null,
+        description: description || '',
+        fill: fill || '',
+        price: parseInt(price),
+        similar_ids: Array.isArray(similar_ids) ? similar_ids : [],
+        image: image || ''
+      };
       const response = await fetch(`${supabaseUrl}/rest/v1/cakes`, {
         method: 'POST',
         headers: { ...headers, 'Prefer': 'return=representation' },
-        body: JSON.stringify([{ name, category, description, fill, price, similar_ids: similar_ids || [], image: image || '' }])
+        body: JSON.stringify([cakeData])
       });
-      const data = await response.json();
+      const responseText = await response.text();
+      if (!response.ok) return res.status(response.status).json({ error: responseText });
+      const data = JSON.parse(responseText);
       return res.json(data[0]);
     } catch (error) {
       return res.status(500).json({ error: error.message });
