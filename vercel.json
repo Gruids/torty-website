@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "builds": [
+    { "src": "api/**/*.js", "use": "@vercel/node" },
+    { "src": "index.html", "use": "@vercel/static" }
+  ],
+  "routes": [
+    { "src": "/api/cakes", "dest": "/api/cakes.js" },
+    { "src": "/api/cakes/(.*)", "dest": "/api/cakes/[id].js" },
+    { "src": "/api/categories", "dest": "/api/categories.js" },
+    { "src": "/api/categories/(.*)", "dest": "/api/categories/[key].js" },
+    { "src": "/(.*)", "dest": "/index.html" }
+  ]
+}
