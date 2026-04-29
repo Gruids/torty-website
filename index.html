@@ -358,12 +358,26 @@
             const similarStr = document.getElementById('new-cake-similar').value.trim();
             const similar_ids = similarStr ? similarStr.split(',').map(s => parseInt(s.trim())).filter(n => n) : [];
             if (name && price > 0) {
-                const res = await fetch('/api/cakes', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ name, category, description, fill, price, similar_ids, image: tempImage })
-                });
-                if (res.ok) { const newCake = await res.json(); cakes.push(newCake); renderCakes(currentFilter); closeAddCake(); }
+                try {
+                    const res = await fetch('/api/cakes', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ name, category, description, fill, price, similar_ids, image: tempImage })
+                    });
+                    if (res.ok) { 
+                        const newCake = await res.json(); 
+                        cakes.push(newCake); 
+                        renderCakes(currentFilter); 
+                        closeAddCake(); 
+                    } else {
+                        const errorText = await res.text();
+                        console.error('Add cake error:', errorText);
+                        alert('Ошибка добавления торта');
+                    }
+                } catch (error) {
+                    console.error('Add cake error:', error);
+                    alert('Ошибка добавления торта');
+                }
             }
         }
 
