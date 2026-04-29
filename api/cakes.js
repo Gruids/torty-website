@@ -1,5 +1,5 @@
-const supabaseUrl = process.env.SUPABASE_URL;
-const supabaseKey = process.env.SUPABASE_SERVICE_KEY;
+const supabaseUrl = "https://твой_проект.supabase.co"; // например https://xyz.supabase.co
+const supabaseKey = "твой_service_role_key"; // начинается с eyJ...
 
 module.exports = async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
