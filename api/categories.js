@@ -18,7 +18,10 @@ module.exports = async (req, res) => {
       const response = await fetch(`${supabaseUrl}/rest/v1/categories?select=*`, { headers });
       const data = await response.json();
       const categories = {};
-      (data || []).forEach(cat => { categories[cat.cat_key] = cat.name; });
+      (data || []).forEach(cat => { 
+        const key = cat.cat_key || cat.key; 
+        if (key) categories[key] = cat.name; 
+      });
       return res.json(categories);
     } catch (error) {
       return res.status(500).json({ error: error.message });
@@ -41,5 +44,6 @@ module.exports = async (req, res) => {
       return res.status(500).json({ error: error.message });
     }
   }
+
   return res.status(405).json({ error: 'Method not allowed' });
 };
