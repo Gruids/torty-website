@@ -425,7 +425,7 @@
             document.getElementById('add-category-modal').classList.remove('show');
         }
 
-        async function addCategory() {
+               async function addCategory() {
             const name = document.getElementById('new-category-name').value.trim();
             const key = document.getElementById('new-category-key').value.trim();
             if (name && key) {
@@ -433,7 +433,7 @@
                     const res = await fetch('/api/categories', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ key, name, admin_pass: '1698' })
+                        body: JSON.stringify({ key: key, name: name, admin_pass: '1698' })
                     });
                     if (res.ok) {
                         const newCat = await res.json();
