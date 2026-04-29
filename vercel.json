@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "rewrites": [
+    { "source": "/api/cakes", "destination": "/api/cakes.js" },
+    { "source": "/api/cakes/:id", "destination": "/api/cakes/[id].js" },
+    { "source": "/api/categories", "destination": "/api/categories.js" },
+    { "source": "/api/categories/:key", "destination": "/api/categories/[key].js" },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}
