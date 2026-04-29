@@ -5,23 +5,30 @@ module.exports = async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  
   if (req.method === 'OPTIONS') return res.status(200).end();
-
+  
   const headers = {
     'apikey': supabaseKey,
-    'Authorization': `Bearer ${supabaseKey}`,
-    'Content-Type': 'application/json'
+    'Authorization': `Bearer ${supabaseKey}`
   };
 
   if (req.method === 'GET') {
     try {
       const response = await fetch(`${supabaseUrl}/rest/v1/categories?select=*`, { headers });
       const data = await response.json();
-      const categories = {};
-      (data || []).forEach(cat => { 
-        if (cat.cat_key) categories[cat.cat_key] = cat.name; 
-      });
-      return res.json(categories);
+      
+      // Преобразуем в формат { "wedding": "Свадебные" }
+      const result = {};
+      if (Array.isArray(data)) {
+        data.forEach(cat => {
+          if (cat.cat_key && cat.name) {
+            result[cat.cat_key] = cat.name;
+          }
+        });
+      }
+      
+      return res.json(result);
     } catch (error) {
       return res.status(500).json({ error: error.message });
     }
@@ -35,12 +42,10 @@ module.exports = async (req, res) => {
     try {
       const response = await fetch(`${supabaseUrl}/rest/v1/categories`, {
         method: 'POST',
-        headers: { ...headers, 'Prefer': 'return=representation' },
+        headers: { ...headers, 'Content-Type': 'application/json', 'Prefer': 'return=representation' },
         body: JSON.stringify([{ cat_key, name }])
       });
-      const responseText = await response.text();
-      if (!response.ok) return res.status(response.status).json({ error: responseText });
-      const data = JSON.parse(responseText);
+      const data = await response.json();
       return res.json(data[0]);
     } catch (error) {
       return res.status(500).json({ error: error.message });
