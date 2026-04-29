@@ -312,16 +312,32 @@
         function showAddCategory() { document.getElementById('new-category-name').value = ''; document.getElementById('new-category-key').value = ''; document.getElementById('add-category-modal').classList.add('show'); }
         function closeAddCategory() { document.getElementById('add-category-modal').classList.remove('show'); }
 
-        async function addCategory() {
+             async function addCategory() {
             const name = document.getElementById('new-category-name').value.trim();
             const cat_key = document.getElementById('new-category-key').value.trim();
             if (name && cat_key) {
-                const res = await fetch('/api/categories', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ cat_key, name, admin_pass: '1698' })
-                });
-                if (res.ok) { categories[cat_key] = name; renderNav(); closeAddCategory(); }
+                try {
+                    const res = await fetch('/api/categories', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ cat_key, name, admin_pass: '1698' })
+                    });
+                    if (res.ok) {
+                        const newCat = await res.json();
+                        // Правильно добавляем в объект
+                        categories[newCat.cat_key || cat_key] = newCat.name || name;
+                        renderNav(); // Обновляем меню
+                        closeAddCategory();
+                        console.log('Добавлена категория:', categories);
+                    } else {
+                        const errorText = await res.text();
+                        console.error('Ошибка добавления категории:', errorText);
+                        alert('Ошибка добавления категории');
+                    }
+                } catch (error) {
+                    console.error('Ошибка:', error);
+                    alert('Ошибка добавления категории');
+                }
             }
         }
 
@@ -333,8 +349,12 @@
             document.getElementById('new-cake-fill').value = '';
             document.getElementById('new-cake-price').value = '';
             document.getElementById('new-cake-similar').value = '';
+            
             const select = document.getElementById('new-cake-category');
-            select.innerHTML = Object.entries(categories).map(([cat_key, name]) => `<option value="${cat_key}" ${cat_key === category ? 'selected' : ''}>${name}</option>`).join('');
+            select.innerHTML = Object.entries(categories).map(([cat_key, name]) => 
+                `<option value="${cat_key}" ${cat_key === category ? 'selected' : ''}>${name}</option>`
+            ).join('');
+            
             document.getElementById('add-cake-modal').classList.add('show');
         }
 
@@ -344,7 +364,10 @@
             const file = document.getElementById('new-cake-image-input').files[0];
             if (file) {
                 const reader = new FileReader();
-                reader.onload = function(e) { tempImage = e.target.result; document.getElementById('image-preview').innerHTML = `<img src="${tempImage}" style="width:100px;height:100px;object-fit:cover;border-radius:8px;">`; };
+                reader.onload = function(e) {
+                    tempImage = e.target.result;
+                    document.getElementById('image-preview').innerHTML = `<img src="${tempImage}" style="width:100px;height:100px;object-fit:cover;border-radius:8px;">`;
+                };
                 reader.readAsDataURL(file);
             }
         }
@@ -357,6 +380,7 @@
             const price = parseInt(document.getElementById('new-cake-price').value) || 0;
             const similarStr = document.getElementById('new-cake-similar').value.trim();
             const similar_ids = similarStr ? similarStr.split(',').map(s => parseInt(s.trim())).filter(n => n) : [];
+            
             if (name && price > 0) {
                 try {
                     const res = await fetch('/api/cakes', {
@@ -364,26 +388,29 @@
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ name, category, description, fill, price, similar_ids, image: tempImage })
                     });
-                    if (res.ok) { 
-                        const newCake = await res.json(); 
-                        cakes.push(newCake); 
-                        renderCakes(currentFilter); 
-                        closeAddCake(); 
-                    } else {
-                        const errorText = await res.text();
-                        console.error('Add cake error:', errorText);
-                        alert('Ошибка добавления торта');
+                    if (res.ok) {
+                        const newCake = await res.json();
+                        cakes.push(newCake);
+                        renderCakes(currentFilter);
+                        closeAddCake();
                     }
                 } catch (error) {
-                    console.error('Add cake error:', error);
                     alert('Ошибка добавления торта');
                 }
             }
         }
 
         function closeOrderModal() { document.getElementById('order-modal').classList.remove('show'); }
-        document.getElementById('order-form').addEventListener('submit', (e) => { e.preventDefault(); alert('Заявка отправлена! Мы свяжемся с вами.'); closeOrderModal(); e.target.reset(); });
-        document.getElementById('order-modal').addEventListener('click', (e) => { if (e.target.id === 'order-modal') closeOrderModal(); });
+        document.getElementById('order-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Заявка отправлена! Мы свяжемся с вами.');
+            closeOrderModal();
+            e.target.reset();
+        });
+        document.getElementById('order-modal').addEventListener('click', (e) => {
+            if (e.target.id === 'order-modal') closeOrderModal();
+        });
+        
         loadData();
     </script>
 </body>
