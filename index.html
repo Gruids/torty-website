@@ -312,7 +312,7 @@
         function showAddCategory() { document.getElementById('new-category-name').value = ''; document.getElementById('new-category-key').value = ''; document.getElementById('add-category-modal').classList.add('show'); }
         function closeAddCategory() { document.getElementById('add-category-modal').classList.remove('show'); }
 
-        async function addCategory() {
+              async function addCategory() {
             const name = document.getElementById('new-category-name').value.trim();
             const cat_key = document.getElementById('new-category-key').value.trim();
             if (name && cat_key) {
@@ -322,13 +322,20 @@
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ cat_key, name, admin_pass: '1698' })
                     });
-                    
-                    // Просто добавляем в локальный объект
-                    categories[cat_key] = name;
-                    renderNav();
-                    closeAddCategory();
-                    console.log('Категория добавлена:', categories);
+                    if (res.ok) {
+                        const newCat = await res.json();
+                        // Добавляем в локальный объект
+                        categories[newCat.cat_key || cat_key] = newCat.name || name;
+                        renderNav(); // Обновляем меню
+                        closeAddCategory();
+                        console.log('Добавлена категория:', categories);
+                    } else {
+                        const errorText = await res.text();
+                        console.error('Ошибка добавления категории:', errorText);
+                        alert('Ошибка добавления категории');
+                    }
                 } catch (error) {
+                    console.error('Ошибка:', error);
                     alert('Ошибка добавления категории');
                 }
             }
