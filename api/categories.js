@@ -3,6 +3,10 @@ const supabaseKey = "sb_secret_mCyxME51X27VXHPUek16mA_d9_65c0M";
 
 module.exports = async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  
+  if (req.method === 'OPTIONS') return res.status(200).end();
 
   if (req.method === 'GET') {
     try {
@@ -10,25 +14,38 @@ module.exports = async (req, res) => {
         headers: { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}` }
       });
       const data = await response.json();
-      console.log('Supabase ответ:', data);
-
-      // Превращаем массив в объект
+      
       const result = {};
       data.forEach(cat => {
-        result[cat.key] = cat.name; // Используем cat.key (как в базе)
+        result[cat.key] = cat.name;
       });
-
-      console.log('Отправляем на сайт:', result);
+      
       return res.json(result);
     } catch (error) {
-      console.error('Ошибка:', error);
-      return res.json({}); // Возвращаем пустой объект вместо ошибки
+      return res.json({});
     }
   }
 
-  // Временно отключаем POST, чтобы сайт работал
   if (req.method === 'POST') {
-    return res.status(200).json({ key: req.body.cat_key, name: req.body.name });
+    try {
+      const { key, name } = req.body; // Используем key, а не cat_key!
+      
+      const response = await fetch(`${supabaseUrl}/rest/v1/categories`, {
+        method: 'POST',
+        headers: { 
+          'apikey': supabaseKey, 
+          'Authorization': `Bearer ${supabaseKey}`, 
+          'Content-Type': 'application/json',
+          'Prefer': 'return=representation' 
+        },
+        body: JSON.stringify([{ key, name }]) // Отправляем key!
+      });
+      
+      const data = await response.json();
+      return res.json(data[0]);
+    } catch (error) {
+      return res.status(500).json({ error: error.message });
+    }
   }
 
   return res.json({});
