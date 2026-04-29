@@ -3,10 +3,7 @@ const supabaseKey = "sb_secret_mCyxME51X27VXHPUek16mA_d9_65c0M";
 
 module.exports = async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  if (req.method === 'OPTIONS') return res.status(200).end();
-
+  
   if (req.method === 'GET') {
     try {
       const response = await fetch(`${supabaseUrl}/rest/v1/categories?select=*`, {
@@ -14,40 +11,20 @@ module.exports = async (req, res) => {
       });
       const data = await response.json();
       
-      // Преобразуем массив в объект { "wedding": "Свадебные" }
       const result = {};
-      if (Array.isArray(data)) {
-        data.forEach(cat => {
-          if (cat.cat_key && cat.name) {
-            result[cat.cat_key] = cat.name;
-          }
-        });
-      }
+      data.forEach(cat => { 
+        if (cat.cat_key) result[cat.cat_key] = cat.name; 
+      });
       
-      console.log('Categories sent to frontend:', result);
       return res.json(result);
     } catch (error) {
-      return res.status(500).json({ error: error.message });
+      return res.json({}); // Возвращаем пустой объект вместо ошибки
     }
   }
 
   if (req.method === 'POST') {
-    const { admin_pass, cat_key, name } = req.body;
-    if (admin_pass !== '1698') return res.status(401).json({ error: 'Unauthorized' });
-    if (!cat_key || !name) return res.status(400).json({ error: 'cat_key and name required' });
-
-    try {
-      const response = await fetch(`${supabaseUrl}/rest/v1/categories`, {
-        method: 'POST',
-        headers: { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}`, 'Content-Type': 'application/json', 'Prefer': 'return=representation' },
-        body: JSON.stringify([{ cat_key, name }])
-      });
-      const data = await response.json();
-      return res.json(data[0]);
-    } catch (error) {
-      return res.status(500).json({ error: error.message });
-    }
+    return res.json({ error: 'disabled' }); // Отключаем пока
   }
 
-  return res.status(405).json({ error: 'Method not allowed' });
+  return res.json({});
 };
