@@ -33,24 +33,16 @@ module.exports = async (req, res) => {
     if (!cat_key || !name) return res.status(400).json({ error: 'cat_key and name required' });
 
     try {
-      console.log('Inserting category:', { cat_key, name });
       const response = await fetch(`${supabaseUrl}/rest/v1/categories`, {
         method: 'POST',
         headers: { ...headers, 'Prefer': 'return=representation' },
         body: JSON.stringify([{ cat_key, name }])
       });
-      
       const responseText = await response.text();
-      console.log('Supabase response:', response.status, responseText);
-      
-      if (!response.ok) {
-        return res.status(response.status).json({ error: responseText });
-      }
-      
+      if (!response.ok) return res.status(response.status).json({ error: responseText });
       const data = JSON.parse(responseText);
       return res.json(data[0]);
     } catch (error) {
-      console.error('POST error:', error);
       return res.status(500).json({ error: error.message });
     }
   }
