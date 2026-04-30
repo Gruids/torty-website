@@ -25,26 +25,21 @@ module.exports = async (req, res) => {
       return res.status(400).json({ error: 'Название и цена обязательны' });
     }
 
-    console.log('Insert data:', { name, category, description, fill, price, similar_ids, image });
-
     const { data, error } = await supabase
       .from('cakes')
       .insert([{
         name: name,
         category: category,
-        desc: description,
+        description: description,
         fill: fill,
         price: price,
-        similar: similar_ids || [],
+        similar_ids: similar_ids || [],
         image: image || ''
       }])
       .select()
       .single();
 
-    if (error) {
-      console.log('Supabase error:', error);
-      return res.status(500).json({ error: error.message, details: error });
-    }
+    if (error) return res.status(500).json({ error: error.message });
     return res.json(data);
   }
 
