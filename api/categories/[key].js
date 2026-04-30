@@ -16,10 +16,23 @@ module.exports = async (req, res) => {
       return res.status(401).json({ error: 'Unauthorized' });
     }
 
-    const { error } = await supabase
+    // Пробуем обе колонки — key и cat_key
+    const { data: existing } = await supabase
       .from('categories')
-      .delete()
-      .eq('cat_key', key);
+      .select('key, cat_key')
+      .or(`key.eq.${key},cat_key.eq.${key}`)
+      .limit(1);
+
+    if (!existing || existing.length === 0) {
+      return res.status(404).json({ error: 'Category not found' });
+    }
+
+    let error;
+    if (existing[0].cat_key !== undefined) {
+      ({ error } = await supabase.from('categories').delete().eq('cat_key', key));
+    } else {
+      ({ error } = await supabase.from('categories').delete().eq('key', key));
+    }
 
     if (error) return res.status(500).json({ error: error.message });
     return res.json({ success: true });
