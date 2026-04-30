@@ -25,6 +25,8 @@ module.exports = async (req, res) => {
       return res.status(400).json({ error: 'Название и цена обязательны' });
     }
 
+    console.log('Insert data:', { name, category, description, fill, price, similar_ids, image });
+
     const { data, error } = await supabase
       .from('cakes')
       .insert([{
@@ -39,7 +41,10 @@ module.exports = async (req, res) => {
       .select()
       .single();
 
-    if (error) return res.status(500).json({ error: error.message });
+    if (error) {
+      console.log('Supabase error:', error);
+      return res.status(500).json({ error: error.message, details: error });
+    }
     return res.json(data);
   }
 
