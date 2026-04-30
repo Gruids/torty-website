@@ -7,10 +7,7 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #ffffff; color: #333; }
-        .admin-bar {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; padding: 10px 20px;
-            background: #333; justify-content: space-between; align-items: center; z-index: 300;
-        }
+        .admin-bar { display: none; position: fixed; top: 0; left: 0; width: 100%; padding: 10px 20px; background: #333; justify-content: space-between; align-items: center; z-index: 300; }
         .admin-bar.show { display: flex; }
         .admin-bar span { color: #fff; font-size: 0.9rem; }
         .admin-close-btn { background: #ff4444; color: #fff; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; }
@@ -269,7 +266,7 @@
                     <div class="cake-info">
                         <div class="cake-category">${categories[cake.category] || cake.category}</div>
                         <h3 class="cake-name">${cake.name}</h3>
-                        <p class="cake-desc">${cake.description || ''}</p>
+                        <p class="cake-desc">${cake.desc || ''}</p>
                         <div class="cake-price">${cake.price.toLocaleString()} ₽</div>
                     </div>
                 </div>
@@ -281,13 +278,13 @@
             const cake = cakes.find(c => c.id === id);
             if (!cake) return;
             currentDetailCake = cake;
-            const similar = (cake.similar_ids || []).map(sid => cakes.find(c => c.id === sid)).filter(Boolean);
+            const similar = (cake.similar || []).map(sid => cakes.find(c => c.id === sid)).filter(Boolean);
             document.getElementById('detail-content').innerHTML = `
                 <div class="detail-image">${cake.image ? `<img src="${cake.image}" alt="${cake.name}">` : '<div class="no-image"><span class="no-image">🎂</span></div>'}</div>
                 <div class="detail-info">
                     <div class="cake-category">${categories[cake.category] || cake.category}</div>
                     <h2 style="color: #111;">${cake.name}</h2>
-                    <p style="margin: 15px 0; color: #666;">${cake.description || ''}</p>
+                    <p style="margin: 15px 0; color: #666;">${cake.desc || ''}</p>
                     <div class="detail-price">${cake.price.toLocaleString()} ₽</div>
                     <div class="detail-fill"><strong>Начинка:</strong> ${cake.fill}</div>
                 </div>
