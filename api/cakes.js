@@ -1,54 +1,38 @@
-const supabaseUrl = "https://tdfiimnmvovxfbesgjij.supabase.co";
-const supabaseKey = "sb_secret_mCyxME51X27VXHPUek16mA_d9_65c0M";
+// api/cakes.js
+const supabase = require('./supabase-client');
 
 module.exports = async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  
   if (req.method === 'OPTIONS') return res.status(200).end();
 
-  const headers = {
-    'apikey': supabaseKey,
-    'Authorization': `Bearer ${supabaseKey}`,
-    'Content-Type': 'application/json'
-  };
-
   if (req.method === 'GET') {
-    try {
-      const response = await fetch(`${supabaseUrl}/rest/v1/cakes?select=*&order=created_at.desc`, { headers });
-      const data = await response.json();
-      return res.json(data);
-    } catch (error) {
-      return res.status(500).json({ error: error.message });
-    }
+    const { data, error } = await supabase
+      .from('cakes')
+      .select('*')
+      .order('created_at', { ascending: false });
+    
+    if (error) return res.status(500).json({ error: error.message });
+    return res.json(data || []);
   }
 
   if (req.method === 'POST') {
     const { name, category, description, fill, price, similar_ids, image } = req.body;
-    if (!name || !price) return res.status(400).json({ error: 'Name and price required' });
-
-    try {
-      const cakeData = {
-        name,
-        category: category || null,
-        description: description || '',
-        fill: fill || '',
-        price: parseInt(price),
-        similar_ids: Array.isArray(similar_ids) ? similar_ids : [],
-        image: image || ''
-      };
-      const response = await fetch(`${supabaseUrl}/rest/v1/cakes`, {
-        method: 'POST',
-        headers: { ...headers, 'Prefer': 'return=representation' },
-        body: JSON.stringify([cakeData])
-      });
-      const responseText = await response.text();
-      if (!response.ok) return res.status(response.status).json({ error: responseText });
-      const data = JSON.parse(responseText);
-      return res.json(data[0]);
-    } catch (error) {
-      return res.status(500).json({ error: error.message });
+    
+    if (!name || !price) {
+      return res.status(400).json({ error: 'Название и цена обязательны' });
     }
+
+    const { data, error } = await supabase
+      .from('cakes')
+      .insert([{ name, category, desc: description, fill, price, similar: similar_ids || [], image: image || '' }])
+      .select()
+      .single();
+
+    if (error) return res.status(500).json({ error: error.message });
+    return res.json(data);
   }
 
   return res.status(405).json({ error: 'Method not allowed' });
