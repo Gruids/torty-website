@@ -527,7 +527,7 @@
             }
 
             filtered.forEach((cake, index) => {
-                const desc = cake.desc || cake.description || '';
+                const desc = cake.description || cake.desc || '';
                 const catName = categories[cake.category] || cake.category;
                 html += '<div class="cake-card" style="animation-delay: ' + (0.05 * (index + 1)) + 's" onclick="showDetail(' + cake.id + ')">';
                 html += '<button class="delete-btn" onclick="event.stopPropagation();deleteCake(' + cake.id + ')">×</button>';
@@ -554,10 +554,10 @@
             const cake = cakes.find(c => c.id === id);
             if (!cake) return;
             currentDetailCake = cake;
-            const similarList = cake.similar || cake.similar_ids || [];
-            const similar = similarList.map(sid => cakes.find(c => c.id === sid)).filter(Boolean);
-            const desc = cake.desc || cake.description || '';
+            const desc = cake.description || cake.desc || '';
             const catName = categories[cake.category] || cake.category;
+            const similarList = cake.similar_ids || cake.similar || [];
+            const similar = similarList.map(sid => cakes.find(c => c.id === sid)).filter(Boolean);
 
             let contentHtml = '';
             contentHtml += '<div class="detail-image">';
@@ -735,7 +735,7 @@
             }
         }
 
-             async function addCake() {
+        async function addCake() {
             const name = document.getElementById('new-cake-name').value.trim();
             const category = document.getElementById('new-cake-category').value;
             const description = document.getElementById('new-cake-desc').value.trim();
@@ -753,27 +753,23 @@
                 return;
             }
 
-            const body = JSON.stringify({ name, category, description, fill, price, similar_ids, image: tempImage });
-            console.log('Sending:', body);
-
             const res = await fetch('/api/cakes', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: body
+                body: JSON.stringify({ name, category, description, fill, price, similar_ids, image: tempImage })
             });
 
-            console.log('Status:', res.status);
-            const result = await res.json();
-            console.log('Result:', result);
-
             if (res.ok) {
-                cakes.push(result);
+                const newCake = await res.json();
+                cakes.push(newCake);
                 renderCakes(currentFilter);
                 closeAddCake();
             } else {
+                const result = await res.json();
                 alert('Ошибка: ' + (result.error || 'Неизвестная ошибка'));
             }
         }
+
         function closeOrderModal() { document.getElementById('order-modal').classList.remove('show'); }
         document.getElementById('order-form').addEventListener('submit', (e) => {
             e.preventDefault();
