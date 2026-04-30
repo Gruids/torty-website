@@ -16,25 +16,20 @@ module.exports = async (req, res) => {
       return res.status(401).json({ error: 'Unauthorized' });
     }
 
-    // Пробуем обе колонки — key и cat_key
-    const { data: existing } = await supabase
+    // Пробуем удалить по key, если ошибка — по cat_key
+    let { error } = await supabase
       .from('categories')
-      .select('key, cat_key')
-      .or(`key.eq.${key},cat_key.eq.${key}`)
-      .limit(1);
+      .delete()
+      .eq('key', key);
 
-    if (!existing || existing.length === 0) {
-      return res.status(404).json({ error: 'Category not found' });
+    if (error) {
+      const { error: error2 } = await supabase
+        .from('categories')
+        .delete()
+        .eq('cat_key', key);
+      if (error2) return res.status(500).json({ error: error2.message });
     }
 
-    let error;
-    if (existing[0].cat_key !== undefined) {
-      ({ error } = await supabase.from('categories').delete().eq('cat_key', key));
-    } else {
-      ({ error } = await supabase.from('categories').delete().eq('key', key));
-    }
-
-    if (error) return res.status(500).json({ error: error.message });
     return res.json({ success: true });
   }
 
