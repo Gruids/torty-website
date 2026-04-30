@@ -1,8 +1,5 @@
 const { createClient } = require('@supabase/supabase-js');
-
-const supabaseUrl = process.env.SUPABASE_URL;
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_KEY;
-const supabase = createClient(supabaseUrl, supabaseServiceKey);
+const supabase = createClient('https://tdfiimnmvovxfbesgjij.supabase.co', 'sb_secret_EEZ5HeRTbH0x0YQODJZBCA_AfvJ2s9B');
 
 module.exports = async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -37,7 +34,6 @@ module.exports = async (req, res) => {
       if (error.code === '23505') {
         return res.status(400).json({ error: 'Такой ключ уже существует' });
       }
-      console.error('Supabase insert error:', error);
       return res.status(500).json({ error: error.message });
     }
     return res.json(data);
