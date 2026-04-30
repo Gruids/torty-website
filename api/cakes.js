@@ -15,17 +15,7 @@ module.exports = async (req, res) => {
       .order('created_at', { ascending: false });
     
     if (error) return res.status(500).json({ error: error.message });
-
-    // Нормализуем поля под фронтенд
-    const normalized = (data || []).map(cake => ({
-      ...cake,
-      desc: cake.desc || cake.description || '',
-      description: cake.desc || cake.description || '',
-      similar: cake.similar || cake.similar_ids || [],
-      similar_ids: cake.similar || cake.similar_ids || []
-    }));
-    
-    return res.json(normalized);
+    return res.json(data || []);
   }
 
   if (req.method === 'POST') {
@@ -35,10 +25,17 @@ module.exports = async (req, res) => {
       return res.status(400).json({ error: 'Название и цена обязательны' });
     }
 
-    // Пробуем вставить с обоими именами колонок
     const { data, error } = await supabase
       .from('cakes')
-      .insert([{ name, category, description, desc: description, fill, price, similar_ids, similar: similar_ids || [], image: image || '' }])
+      .insert([{
+        name: name,
+        category: category,
+        desc: description,
+        fill: fill,
+        price: price,
+        similar: similar_ids || [],
+        image: image || ''
+      }])
       .select()
       .single();
 
