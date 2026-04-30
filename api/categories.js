@@ -1,52 +1,43 @@
-const supabaseUrl = "https://tdfiimnmvovxfbesgjij.supabase.co";
-const supabaseKey = "sb_secret_mCyxME51X27VXHPUek16mA_d9_65c0M";
+// api/categories.js
+const supabase = require('./supabase-client');
 
 module.exports = async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   
   if (req.method === 'OPTIONS') return res.status(200).end();
 
   if (req.method === 'GET') {
-    try {
-      const response = await fetch(`${supabaseUrl}/rest/v1/categories?select=*`, {
-        headers: { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}` }
-      });
-      const data = await response.json();
-      
-      const result = {};
-      data.forEach(cat => {
-        result[cat.key] = cat.name;
-      });
-      
-      return res.json(result);
-    } catch (error) {
-      return res.json({});
-    }
+    const { data, error } = await supabase
+      .from('categories')
+      .select('*');
+    
+    if (error) return res.status(500).json({ error: error.message });
+    
+    const categories = {};
+    (data || []).forEach(cat => {
+      categories[cat.key] = cat.name;
+    });
+    
+    return res.json(categories);
   }
 
   if (req.method === 'POST') {
-    try {
-      const { key, name } = req.body; // Используем key, а не cat_key!
-      
-      const response = await fetch(`${supabaseUrl}/rest/v1/categories`, {
-        method: 'POST',
-        headers: { 
-          'apikey': supabaseKey, 
-          'Authorization': `Bearer ${supabaseKey}`, 
-          'Content-Type': 'application/json',
-          'Prefer': 'return=representation' 
-        },
-        body: JSON.stringify([{ key, name }]) // Отправляем key!
-      });
-      
-      const data = await response.json();
-      return res.json(data[0]);
-    } catch (error) {
-      return res.status(500).json({ error: error.message });
+    const { admin_pass, cat_key, name } = req.body;
+    if (admin_pass !== '1698') {
+      return res.status(401).json({ error: 'Unauthorized' });
     }
+
+    const { data, error } = await supabase
+      .from('categories')
+      .insert([{ key: cat_key, name }])
+      .select()
+      .single();
+    
+    if (error) return res.status(500).json({ error: error.message });
+    return res.json(data);
   }
 
-  return res.json({});
+  return res.status(405).json({ error: 'Method not allowed' });
 };
