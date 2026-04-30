@@ -17,7 +17,8 @@ module.exports = async (req, res) => {
     
     const categories = {};
     (data || []).forEach(cat => {
-      categories[cat.cat_key] = cat.name;
+      const key = cat.key || cat.cat_key;
+      categories[key] = cat.name;
     });
     
     return res.json(categories);
@@ -31,7 +32,7 @@ module.exports = async (req, res) => {
 
     const { data, error } = await supabase
       .from('categories')
-      .insert([{ cat_key, name }])
+      .insert([{ cat_key: cat_key, name: name }])
       .select()
       .single();
     
