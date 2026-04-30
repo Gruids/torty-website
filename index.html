@@ -7,56 +7,48 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #ffffff; color: #333; }
-        
         .admin-bar {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; padding: 10px 20px;
+            display: none; position: fixed; top: 0; left: 0; width: 100%; padding: 10px 20px;
             background: #333; justify-content: space-between; align-items: center; z-index: 300;
         }
         .admin-bar.show { display: flex; }
         .admin-bar span { color: #fff; font-size: 0.9rem; }
         .admin-close-btn { background: #ff4444; color: #fff; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; }
-        
         header { background: #111111; padding: 0; text-align: center; position: relative; overflow: hidden; animation: headerAnim 1s ease; }
         @keyframes headerAnim { from { transform: translateY(-100%); } to { transform: translateY(0); } }
         .header-inner { position: relative; z-index: 2; padding: 40px 20px 35px; }
         .header-swirls { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
         h1 { font-size: 2.5rem; color: #ffffff; margin-bottom: 10px; font-weight: 300; letter-spacing: 4px; text-transform: uppercase; }
         .subtitle { color: #aaaaaa; font-size: 1rem; letter-spacing: 2px; }
-        
         nav { background: #fff; padding: 15px; text-align: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         nav button { background: none; border: none; padding: 10px 20px; margin: 5px; cursor: pointer; font-size: 1rem; color: #111; border-radius: 25px; }
         nav button:hover, nav button.active { background: #111; color: #fff; }
         nav .add-cat-btn { display: none; background: #4CAF50; color: #fff; width: 35px; height: 35px; border-radius: 50%; padding: 0; line-height: 35px; font-size: 1.3rem; margin-left: 10px; cursor: pointer; }
         body.admin-mode nav .add-cat-btn { display: inline-block; }
-        
+        nav .nav-cat-group { position: relative; display: inline-flex; align-items: center; margin: 5px; }
+        .nav-cat-del { display: none; background: #ff4444; color: #fff; border: none; width: 22px; height: 22px; border-radius: 50%; cursor: pointer; font-size: 0.8rem; line-height: 22px; text-align: center; margin-left: 4px; padding: 0; }
+        body.admin-mode .nav-cat-del { display: inline-block; }
+        .nav-cat-del:hover { background: #cc0000; }
         main { max-width: 1200px; margin: 0 auto; padding: 30px 20px; }
         .cakes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; }
-        
         .cake-card { background: #fff; border-radius: 15px; overflow: hidden; box-shadow: 0 3px 15px rgba(0,0,0,0.08); cursor: pointer; transition: transform 0.3s, box-shadow 0.3s; position: relative; }
         .cake-card:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(0,0,0,0.15); }
-        
         .add-card-btn { display: none; background: #f5f5f5; border: 2px dashed #ccc; border-radius: 15px; cursor: pointer; transition: all 0.3s; min-height: 280px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #999; font-size: 3rem; }
         .add-card-btn:hover { border-color: #4CAF50; color: #4CAF50; }
         body:not(.admin-mode) .add-card-btn { display: none !important; }
         body.admin-mode .add-card-btn { display: flex !important; }
-        
         .cake-card .delete-btn { display: none; position: absolute; top: 10px; right: 10px; background: #ff4444; color: #fff; border: none; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 1.2rem; z-index: 10; }
+        .admin-bar.show ~ header, .admin-bar.show ~ nav, .admin-bar.show ~ main { margin-top: 50px; }
         body.admin-mode .cake-card .delete-btn { display: block; }
-        
         .cake-image { width: 100%; height: 200px; background: #e8d5c4; display: flex; align-items: center; justify-content: center; overflow: hidden; }
         .cake-image img { width: 100%; height: 100%; object-fit: cover; }
         .cake-image .no-image { font-size: 3rem; color: #aaa; }
-        
         .cake-info { padding: 20px; }
         .cake-category { font-size: 0.8rem; color: #888; text-transform: uppercase; margin-bottom: 8px; letter-spacing: 1px; }
         .cake-name { font-size: 1.3rem; color: #111; margin-bottom: 5px; }
         .cake-desc { color: #666; font-size: 0.9rem; line-height: 1.5; margin-bottom: 10px; }
         .cake-price { font-size: 1.4rem; color: #111; font-weight: bold; }
-        
         footer { background: #111; color: #ccc; padding: 30px 20px; text-align: center; }
-        
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; }
         .modal.show { display: flex; }
         .modal-content { background: #fff; padding: 30px; border-radius: 15px; max-width: 600px; width: 90%; max-height: 90vh; overflow-y: auto; }
@@ -68,7 +60,6 @@
         .modal-buttons button { flex: 1; padding: 12px; border: none; border-radius: 8px; font-size: 1rem; cursor: pointer; }
         .submit-btn { background: #111; color: #fff; }
         .close-btn { background: #eee; color: #333; }
-        
         .detail-modal { max-width: 900px; }
         .detail-content { display: flex; gap: 30px; flex-wrap: wrap; }
         .detail-image { flex: 1; min-width: 300px; }
@@ -78,7 +69,6 @@
         .detail-price { font-size: 2rem; color: #111; font-weight: bold; margin: 15px 0; }
         .detail-fill { margin: 10px 0; color: #666; }
         .detail-fill strong { color: #111; }
-        
         .similar-cakes { margin-top: 30px; width: 100%; }
         .similar-cakes h3 { color: #111; margin-bottom: 15px; }
         .similar-grid { display: flex; gap: 15px; overflow-x: auto; padding-bottom: 10px; }
@@ -86,7 +76,6 @@
         .similar-item img { width: 100%; height: 100px; object-fit: cover; border-radius: 10px; }
         .similar-item .no-image { height: 100px; background: #e8d5c4; display: flex; align-items: center; justify-content: center; border-radius: 10px; }
         .similar-item p { font-size: 0.8rem; margin-top: 5px; color: #111; }
-        
         .add-cake-modal input[type="file"] { display: none; }
         .upload-btn { background: #4CAF50; color: #fff; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; display: inline-block; margin-bottom: 10px; }
         .loading { text-align: center; padding: 40px; color: #666; }
@@ -97,9 +86,7 @@
         <span>Режим админа</span>
         <button class="admin-close-btn" onclick="logoutAdmin()">× Выйти</button>
     </div>
-
     <button class="admin-btn" onclick="showLogin()" style="position:fixed;top:15px;right:15px;background:#666;color:#fff;border:none;padding:8px 15px;border-radius:5px;cursor:pointer;font-size:0.9rem;z-index:200;">Админ</button>
-    
     <header>
         <svg class="header-swirls" viewBox="0 0 1200 160" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
             <g stroke="#ffffff" stroke-width="1.2" fill="none" opacity="0.18">
@@ -120,12 +107,8 @@
                 <path d="M350,15 C400,5 450,25 500,12 C550,-1 600,20 650,12 C700,4 750,22 800,15 C850,8 900,25 950,15"/>
             </g>
             <g fill="#ffffff" opacity="0.1">
-                <circle cx="200" cy="30" r="2.5"/>
-                <circle cx="225" cy="18" r="1.8"/>
-                <circle cx="215" cy="45" r="1.5"/>
-                <circle cx="1000" cy="30" r="2.5"/>
-                <circle cx="975" cy="18" r="1.8"/>
-                <circle cx="985" cy="45" r="1.5"/>
+                <circle cx="200" cy="30" r="2.5"/><circle cx="225" cy="18" r="1.8"/><circle cx="215" cy="45" r="1.5"/>
+                <circle cx="1000" cy="30" r="2.5"/><circle cx="975" cy="18" r="1.8"/><circle cx="985" cy="45" r="1.5"/>
             </g>
             <g stroke="#ffffff" stroke-width="1" fill="none" opacity="0.15" transform="translate(600,20)">
                 <path d="M-60,0 C-40,-15 -20,5 0,-5 C20,-15 40,5 60,0"/>
@@ -141,20 +124,17 @@
             <p class="subtitle">Ручная работа с любовью</p>
         </div>
     </header>
-    
     <nav id="category-nav">
         <button class="active" data-category="all">Все</button>
         <button class="add-cat-btn" onclick="showAddCategory()">+</button>
     </nav>
-
     <main>
         <div class="loading" id="loading">Загрузка...</div>
         <div class="cakes-grid" id="cakes-grid" style="display:none;"></div>
     </main>
-
     <footer>
-        <div>Тел: +7 (921) 698-46-70</div>
-        <p>Заказ от 3 дней. Доставка по городу имеется.</p>
+        <div>Тел: +7 (999) 000-00-00</div>
+        <p>Заказ от 3 дней. Доставка по городу бесплатно.</p>
     </footer>
 
     <div class="modal" id="order-modal">
@@ -243,20 +223,13 @@
                     fetch('/api/cakes'),
                     fetch('/api/categories')
                 ]);
-                
                 cakes = await cakesRes.json();
                 categories = await categoriesRes.json();
-                
-                console.log('Торты:', cakes);
-                console.log('Категории:', categories);
-                
                 document.getElementById('loading').style.display = 'none';
                 document.getElementById('cakes-grid').style.display = 'grid';
-                
                 renderNav();
                 renderCakes();
             } catch (error) {
-                console.error('Ошибка загрузки:', error);
                 document.getElementById('loading').textContent = 'Ошибка загрузки данных';
             }
         }
@@ -265,19 +238,15 @@
             const nav = document.getElementById('category-nav');
             let html = '<button data-category="all">Все</button>';
             for (let key in categories) {
-                html += `<button data-category="${key}">${categories[key]}</button>`;
+                html += `<span class="nav-cat-group"><button data-category="${key}">${categories[key]}</button><button class="nav-cat-del" onclick="deleteCategory('${key}')" title="Удалить категорию">×</button></span>`;
             }
-            if (isAdmin) {
-                html += '<button class="add-cat-btn" onclick="showAddCategory()">+</button>';
-            }
+            if (isAdmin) html += '<button class="add-cat-btn" onclick="showAddCategory()">+</button>';
             nav.innerHTML = html;
-            
             const activeBtn = nav.querySelector(`[data-category="${currentFilter}"]`) || nav.querySelector('[data-category="all"]');
             if (activeBtn) activeBtn.classList.add('active');
-            
             nav.querySelectorAll('button').forEach(btn => {
                 btn.addEventListener('click', () => {
-                    if (btn.classList.contains('add-cat-btn')) return;
+                    if (btn.classList.contains('add-cat-btn') || btn.classList.contains('nav-cat-del')) return;
                     nav.querySelectorAll('button').forEach(b => b.classList.remove('active'));
                     btn.classList.add('active');
                     currentFilter = btn.dataset.category || "all";
@@ -289,22 +258,14 @@
         function renderCakes(filter = "all") {
             const grid = document.getElementById('cakes-grid');
             const filtered = filter === "all" || !filter ? cakes : cakes.filter(c => c.category === filter);
-            
             let html = "";
-            
-            if (isAdmin && filter !== "all" && filter) {
-                html += `<div class="add-card-btn" onclick="showAddCake('${filter}')">
-                    <span>+</span>
-                    <span style="font-size:1rem;margin-top:10px;">Добавить торт</span>
-                </div>`;
+            if (isAdmin) {
+                html += `<div class="add-card-btn" onclick="showAddCake('${filter === "all" ? "" : filter}')"><span>+</span><span style="font-size:1rem;margin-top:10px;">Добавить торт</span></div>`;
             }
-            
             html += filtered.map((cake, index) => `
                 <div class="cake-card" style="animation-delay: ${0.05 * (index + 1)}s" onclick="showDetail(${cake.id})">
                     <button class="delete-btn" onclick="event.stopPropagation();deleteCake(${cake.id})">×</button>
-                    <div class="cake-image">
-                        ${cake.image ? `<img src="${cake.image}" alt="${cake.name}">` : '<span class="no-image">🎂</span>'}
-                    </div>
+                    <div class="cake-image">${cake.image ? `<img src="${cake.image}" alt="${cake.name}">` : '<span class="no-image">🎂</span>'}</div>
                     <div class="cake-info">
                         <div class="cake-category">${categories[cake.category] || cake.category}</div>
                         <h3 class="cake-name">${cake.name}</h3>
@@ -313,7 +274,6 @@
                     </div>
                 </div>
             `).join("");
-            
             grid.innerHTML = html;
         }
 
@@ -321,13 +281,9 @@
             const cake = cakes.find(c => c.id === id);
             if (!cake) return;
             currentDetailCake = cake;
-            
             const similar = (cake.similar_ids || []).map(sid => cakes.find(c => c.id === sid)).filter(Boolean);
-            
             document.getElementById('detail-content').innerHTML = `
-                <div class="detail-image">
-                    ${cake.image ? `<img src="${cake.image}" alt="${cake.name}">` : '<div class="no-image"><span class="no-image">🎂</span></div>'}
-                </div>
+                <div class="detail-image">${cake.image ? `<img src="${cake.image}" alt="${cake.name}">` : '<div class="no-image"><span class="no-image">🎂</span></div>'}</div>
                 <div class="detail-info">
                     <div class="cake-category">${categories[cake.category] || cake.category}</div>
                     <h2 style="color: #111;">${cake.name}</h2>
@@ -338,115 +294,70 @@
                 ${similar.length > 0 ? `
                 <div class="similar-cakes">
                     <h3>Похожие варианты</h3>
-                    <div class="similar-grid">
-                        ${similar.map(s => `
-                            <div class="similar-item" onclick="showDetail(${s.id})">
-                                ${s.image ? `<img src="${s.image}" alt="${s.name}">` : '<div class="no-image"><span class="no-image">🎂</span></div>'}
-                                <p>${s.name}</p>
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>
-                ` : ''}
+                    <div class="similar-grid">${similar.map(s => `
+                        <div class="similar-item" onclick="showDetail(${s.id})">
+                            ${s.image ? `<img src="${s.image}" alt="${s.name}">` : '<div class="no-image"><span class="no-image">🎂</span></div>'}
+                            <p>${s.name}</p>
+                        </div>
+                    `).join('')}</div>
+                </div>` : ''}
             `;
-            
             document.getElementById('detail-modal').classList.add('show');
         }
 
-        function closeDetail() {
-            document.getElementById('detail-modal').classList.remove('show');
-            currentDetailCake = null;
-        }
-
-        function orderFromDetail() {
-            if (currentDetailCake) {
-                document.getElementById('order-cake-name').value = currentDetailCake.name;
-                document.getElementById('order-modal').classList.add('show');
-            }
-        }
-
-        function showLogin() {
-            document.getElementById('login-modal').classList.add('show');
-            document.getElementById('admin-password').value = '';
-        }
-
-        function closeLogin() {
-            document.getElementById('login-modal').classList.remove('show');
-        }
-
-        function checkPassword() {
-            if (document.getElementById('admin-password').value === '1698') {
-                closeLogin();
-                loginAdmin();
-            } else {
-                alert('Неверный пароль!');
-            }
-        }
-
-        function loginAdmin() {
-            isAdmin = true;
-            document.body.classList.add('admin-mode');
-            document.getElementById('admin-bar').classList.add('show');
-            renderCakes(currentFilter);
-            renderNav();
-        }
-
-        function logoutAdmin() {
-            isAdmin = false;
-            document.body.classList.remove('admin-mode');
-            document.getElementById('admin-bar').classList.remove('show');
-            renderCakes(currentFilter);
-            renderNav();
-        }
+        function closeDetail() { document.getElementById('detail-modal').classList.remove('show'); currentDetailCake = null; }
+        function orderFromDetail() { if (currentDetailCake) { document.getElementById('order-cake-name').value = currentDetailCake.name; document.getElementById('order-modal').classList.add('show'); } }
+        function showLogin() { document.getElementById('login-modal').classList.add('show'); document.getElementById('admin-password').value = ''; }
+        function closeLogin() { document.getElementById('login-modal').classList.remove('show'); }
+        function checkPassword() { if (document.getElementById('admin-password').value === '1698') { closeLogin(); loginAdmin(); } else { alert('Неверный пароль!'); } }
+        function loginAdmin() { isAdmin = true; document.body.classList.add('admin-mode'); document.getElementById('admin-bar').classList.add('show'); renderCakes(currentFilter); renderNav(); }
+        function logoutAdmin() { isAdmin = false; document.body.classList.remove('admin-mode'); document.getElementById('admin-bar').classList.remove('show'); renderCakes(currentFilter); renderNav(); }
 
         async function deleteCake(id) {
             if (!confirm('Удалить торт?')) return;
-            
-            try {
-                const res = await fetch(`/api/cakes/${id}?admin_pass=1698`, {
-                    method: 'DELETE'
+            const res = await fetch(`/api/cakes/${id}?admin_pass=1698`, { method: 'DELETE' });
+            if (res.ok) { cakes = cakes.filter(c => c.id !== id); renderCakes(currentFilter); }
+        }
+
+        function showAddCategory() { document.getElementById('new-category-name').value = ''; document.getElementById('new-category-key').value = ''; document.getElementById('add-category-modal').classList.add('show'); }
+        function closeAddCategory() { document.getElementById('add-category-modal').classList.remove('show'); }
+
+        async function addCategory() {
+            const name = document.getElementById('new-category-name').value.trim();
+            const cat_key = document.getElementById('new-category-key').value.trim();
+            if (name && cat_key) {
+                const res = await fetch('/api/categories', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ cat_key, name, admin_pass: '1698' })
                 });
-                if (res.ok) {
-                    cakes = cakes.filter(c => c.id !== id);
-                    renderCakes(currentFilter);
-                }
-            } catch (error) {
-                alert('Ошибка удаления');
+                if (res.ok) { categories[cat_key] = name; renderNav(); closeAddCategory(); }
             }
         }
 
-        function showAddCategory() {
-            document.getElementById('new-category-name').value = '';
-            document.getElementById('new-category-key').value = '';
-            document.getElementById('add-category-modal').classList.add('show');
-        }
+        async function deleteCategory(cat_key) {
+            const hasCakes = cakes.some(c => c.category === cat_key);
+            const msg = hasCakes
+                ? `В категории "${categories[cat_key]}" есть торты (${cakes.filter(c => c.category === cat_key).length} шт.). Удалить категорию и все торты в ней?`
+                : `Удалить категорию "${categories[cat_key]}"?`;
+            if (!confirm(msg)) return;
 
-        function closeAddCategory() {
-            document.getElementById('add-category-modal').classList.remove('show');
-        }
-
-               async function addCategory() {
-            const name = document.getElementById('new-category-name').value.trim();
-            const key = document.getElementById('new-category-key').value.trim();
-            if (name && key) {
-                try {
-                    const res = await fetch('/api/categories', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ key: key, name: name, admin_pass: '1698' })
-                    });
-                    if (res.ok) {
-                        const newCat = await res.json();
-                        categories[newCat.key || key] = newCat.name || name;
-                        renderNav();
-                        closeAddCategory();
-                        console.log('Категория добавлена:', categories);
-                    } else {
-                        alert('Ошибка добавления категории');
-                    }
-                } catch (error) {
-                    alert('Ошибка добавления категории');
+            if (hasCakes) {
+                const cakeIds = cakes.filter(c => c.category === cat_key).map(c => c.id);
+                for (const id of cakeIds) {
+                    await fetch(`/api/cakes/${id}?admin_pass=1698`, { method: 'DELETE' });
                 }
+                cakes = cakes.filter(c => c.category !== cat_key);
+            }
+
+            const res = await fetch(`/api/categories/${cat_key}?admin_pass=1698`, { method: 'DELETE' });
+            if (res.ok) {
+                delete categories[cat_key];
+                if (currentFilter === cat_key) currentFilter = "all";
+                renderNav();
+                renderCakes(currentFilter);
+            } else {
+                alert('Ошибка при удалении категории');
             }
         }
 
@@ -458,27 +369,18 @@
             document.getElementById('new-cake-fill').value = '';
             document.getElementById('new-cake-price').value = '';
             document.getElementById('new-cake-similar').value = '';
-            
             const select = document.getElementById('new-cake-category');
-            select.innerHTML = Object.entries(categories).map(([key, name]) => 
-                `<option value="${key}" ${key === category ? 'selected' : ''}>${name}</option>`
-            ).join('');
-            
+            select.innerHTML = Object.entries(categories).map(([cat_key, name]) => `<option value="${cat_key}" ${cat_key === category ? 'selected' : ''}>${name}</option>`).join('');
             document.getElementById('add-cake-modal').classList.add('show');
         }
 
-        function closeAddCake() {
-            document.getElementById('add-cake-modal').classList.remove('show');
-        }
+        function closeAddCake() { document.getElementById('add-cake-modal').classList.remove('show'); }
 
         function previewImage() {
             const file = document.getElementById('new-cake-image-input').files[0];
             if (file) {
                 const reader = new FileReader();
-                reader.onload = function(e) {
-                    tempImage = e.target.result;
-                    document.getElementById('image-preview').innerHTML = `<img src="${tempImage}" style="width:100px;height:100px;object-fit:cover;border-radius:8px;">`;
-                };
+                reader.onload = function(e) { tempImage = e.target.result; document.getElementById('image-preview').innerHTML = `<img src="${tempImage}" style="width:100px;height:100px;object-fit:cover;border-radius:8px;">`; };
                 reader.readAsDataURL(file);
             }
         }
@@ -491,42 +393,19 @@
             const price = parseInt(document.getElementById('new-cake-price').value) || 0;
             const similarStr = document.getElementById('new-cake-similar').value.trim();
             const similar_ids = similarStr ? similarStr.split(',').map(s => parseInt(s.trim())).filter(n => n) : [];
-            
             if (name && price > 0) {
-                try {
-                    const res = await fetch('/api/cakes', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ name, category, description, fill, price, similar_ids, image: tempImage })
-                    });
-                    if (res.ok) {
-                        const newCake = await res.json();
-                        cakes.push(newCake);
-                        renderCakes(currentFilter);
-                        closeAddCake();
-                    } else {
-                        alert('Ошибка добавления торта');
-                    }
-                } catch (error) {
-                    alert('Ошибка добавления торта');
-                }
+                const res = await fetch('/api/cakes', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, category, description, fill, price, similar_ids, image: tempImage })
+                });
+                if (res.ok) { const newCake = await res.json(); cakes.push(newCake); renderCakes(currentFilter); closeAddCake(); }
             }
         }
 
-        function closeOrderModal() {
-            document.getElementById('order-modal').classList.remove('show');
-        }
-
-        document.getElementById('order-form').addEventListener('submit', (e) => {
-            e.preventDefault();
-            alert('Заявка отправлена! Мы свяжемся с вами.');
-            closeOrderModal();
-            e.target.reset();
-        });
-
-        document.getElementById('order-modal').addEventListener('click', (e) => {
-            if (e.target.id === 'order-modal') closeOrderModal();
-        });
+        function closeOrderModal() { document.getElementById('order-modal').classList.remove('show'); }
+        document.getElementById('order-form').addEventListener('submit', (e) => { e.preventDefault(); alert('Заявка отправлена! Мы свяжемся с вами.'); closeOrderModal(); e.target.reset(); });
+        document.getElementById('order-modal').addEventListener('click', (e) => { if (e.target.id === 'order-modal') closeOrderModal(); });
 
         loadData();
     </script>
