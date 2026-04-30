@@ -735,7 +735,7 @@
             }
         }
 
-        async function addCake() {
+             async function addCake() {
             const name = document.getElementById('new-cake-name').value.trim();
             const category = document.getElementById('new-cake-category').value;
             const description = document.getElementById('new-cake-desc').value.trim();
@@ -743,21 +743,37 @@
             const price = parseInt(document.getElementById('new-cake-price').value) || 0;
             const similarStr = document.getElementById('new-cake-similar').value.trim();
             const similar_ids = similarStr ? similarStr.split(',').map(s => parseInt(s.trim())).filter(n => n) : [];
-            if (name && price > 0) {
-                const res = await fetch('/api/cakes', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ name, category, description, fill, price, similar_ids, image: tempImage })
-                });
-                if (res.ok) {
-                    const newCake = await res.json();
-                    cakes.push(newCake);
-                    renderCakes(currentFilter);
-                    closeAddCake();
-                }
+
+            if (!name) {
+                alert('Введи название торта');
+                return;
+            }
+            if (price <= 0) {
+                alert('Введи цену');
+                return;
+            }
+
+            const body = JSON.stringify({ name, category, description, fill, price, similar_ids, image: tempImage });
+            console.log('Sending:', body);
+
+            const res = await fetch('/api/cakes', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: body
+            });
+
+            console.log('Status:', res.status);
+            const result = await res.json();
+            console.log('Result:', result);
+
+            if (res.ok) {
+                cakes.push(result);
+                renderCakes(currentFilter);
+                closeAddCake();
+            } else {
+                alert('Ошибка: ' + (result.error || 'Неизвестная ошибка'));
             }
         }
-
         function closeOrderModal() { document.getElementById('order-modal').classList.remove('show'); }
         document.getElementById('order-form').addEventListener('submit', (e) => {
             e.preventDefault();
