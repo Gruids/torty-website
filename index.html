@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Торты на заказ</title>
+    <title>Торты в Великом Новгороде</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #ffffff; color: #333; }
@@ -31,7 +31,6 @@
             cursor: pointer;
         }
 
-        /* Новый блок поиска выше категорий */
         .search-section {
             background: #fff;
             padding: 15px 20px;
@@ -86,10 +85,10 @@
             pointer-events: none;
             z-index: 1;
         }
+        /* Обновлённый заголовок с городом */
         h1 { font-size: 2.5rem; color: #ffffff; margin-bottom: 10px; font-weight: 300; letter-spacing: 4px; text-transform: uppercase; }
         .subtitle { color: #aaaaaa; font-size: 1rem; letter-spacing: 2px; }
 
-        /* Категории в исходном виде */
         nav {
             background: #fff;
             padding: 15px;
@@ -148,7 +147,6 @@
         body.admin-mode .nav-cat-del { display: inline-block; }
         .nav-cat-del:hover { background: #cc0000; }
 
-        /* Отступы при активном админ-баре */
         .admin-bar.show ~ header,
         .admin-bar.show ~ .search-section,
         .admin-bar.show ~ nav,
@@ -237,6 +235,7 @@
         .cake-desc { color: #666; font-size: 0.9rem; line-height: 1.5; margin-bottom: 10px; }
         .cake-price { font-size: 1.4rem; color: #111; font-weight: bold; }
 
+        /* Обновлённый футер */
         footer { background: #111; color: #ccc; padding: 30px 20px; text-align: center; }
 
         .modal {
@@ -358,12 +357,12 @@
             </g>
         </svg>
         <div class="header-inner">
-            <h1>Торты на заказ по Великому Новгороду</h1>
+            <!-- Обновлённый заголовок с городом -->
+            <h1>Торты в Великом Новгороде 🎂</h1>
             <p class="subtitle">Ручная работа с любовью</p>
         </div>
     </header>
 
-    <!-- Поиск выше категорий -->
     <div class="search-section">
         <div class="search-container">
             <input type="text" id="search-input" placeholder="Поиск тортов (можно с опечатками)">
@@ -381,12 +380,13 @@
         <div class="cakes-grid" id="cakes-grid" style="display:none;"></div>
     </main>
 
+    <!-- Обновлённый футер -->
     <footer>
-        <div>Тел: +7 (999) 000-00-00</div>
-        <p>Заказ от 3 дней. Доставка по городу бесплатно.</p>
+        <div>Тел: 89216984670</div>
+        <p>Доставка по городу имеется</p>
     </footer>
 
-    <!-- Модальные окна без изменений -->
+    <!-- Модальные окна (без изменений) -->
     <div class="modal" id="order-modal">
         <div class="modal-content">
             <h2>Оформить заказ</h2>
@@ -510,7 +510,6 @@
         let currentFilter = "all";
         let searchQuery = "";
 
-        // Расстояние Левенштейна для поиска с опечатками
         function levenshtein(a, b) {
             a = a.toLowerCase();
             b = b.toLowerCase();
@@ -529,13 +528,11 @@
             return matrix[b.length][a.length];
         }
 
-        // Нечеткий поиск (допускает опечатки)
         function fuzzyMatch(query, text, maxErrors = 2) {
             if (!query || !text) return false;
             query = query.toLowerCase().trim();
             text = text.toLowerCase().trim();
             
-            // Сначала проверяем точное вхождение
             if (text.includes(query)) return true;
             
             const queryWords = query.split(/\s+/).filter(w => w.length > 0);
@@ -569,7 +566,6 @@
             }
         }
 
-        // Категории в исходном виде
         function renderNav() {
             const nav = document.getElementById('category-nav');
             let html = '<button data-category="all">Все</button>';
@@ -603,12 +599,10 @@
             const grid = document.getElementById('cakes-grid');
             let filtered = cakes;
 
-            // Фильтр по категории
             if (currentFilter !== "all") {
                 filtered = filtered.filter(c => c.category === currentFilter);
             }
 
-            // Нечеткий поиск с исправлением опечаток
             if (searchQuery) {
                 filtered = filtered.filter(c => {
                     const name = c.name || '';
@@ -652,7 +646,6 @@
             grid.innerHTML = html;
         }
 
-        // Остальные функции (showDetail, login, addCake и т.д.) без изменений
         function showDetail(id) {
             const cake = cakes.find(c => c.id === id);
             if (!cake) return;
@@ -892,7 +885,6 @@
             if (e.target.id === 'order-modal') closeOrderModal();
         });
 
-        // Обработчики поиска
         document.getElementById('search-input').addEventListener('input', function() {
             searchQuery = this.value.trim();
             renderCakes();
