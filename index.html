@@ -249,6 +249,7 @@
         </button>
     </div>
 
+    <!-- Модальные окна -->
     <div class="modal" id="order-modal">
         <div class="modal-content">
             <h2>Оформить заказ</h2>
@@ -332,6 +333,14 @@
         let chatOpen = false;
         let unreadCount = 0;
 
+        // Генерация ID пользователя для чата
+        let userId = localStorage.getItem('chat_user_id');
+        if (!userId) {
+            userId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+            localStorage.setItem('chat_user_id', userId);
+        }
+
+        // Алгоритм Левенштейна для поиска с опечатками
         function levenshtein(a, b) {
             a = a.toLowerCase();
             b = b.toLowerCase();
@@ -365,6 +374,7 @@
             return false;
         }
 
+        // Логика чата
         function toggleChat() {
             chatOpen = !chatOpen;
             document.getElementById('chat-window').classList.toggle('open', chatOpen);
@@ -377,7 +387,8 @@
 
         async function loadMessages() {
             try {
-                const res = await fetch('/api/chat');
+                const url = isAdmin ? '/api/chat?all=1' : `/api/chat?user_id=${userId}`;
+                const res = await fetch(url);
                 const msgs = await res.json();
                 renderMessages(msgs);
             } catch(e) { console.error(e); }
@@ -388,7 +399,7 @@
             container.innerHTML = '';
             msgs.forEach(m => {
                 const div = document.createElement('div');
-                div.className = 'msg ' + (m.is_admin ? 'admin' : 'user');
+                div.className = `msg ${m.is_admin ? 'admin' : 'user'}`;
                 div.textContent = m.message;
                 container.appendChild(div);
             });
@@ -402,12 +413,18 @@
             await fetch('/api/chat', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({sender: isAdmin ? 'admin' : 'user', message: text, is_admin: isAdmin})
+                body: JSON.stringify({
+                    sender: isAdmin ? 'admin' : 'user',
+                    message: text,
+                    is_admin: isAdmin,
+                    user_id: userId
+                })
             });
             input.value = '';
             loadMessages();
         }
 
+        // Проверка непрочитанных сообщений для админа
         setInterval(() => {
             if (isAdmin && !chatOpen) {
                 fetch('/api/chat?unread=1').then(r => r.json()).then(data => {
@@ -421,6 +438,7 @@
             }
         }, 5000);
 
+        // Загрузка данных о тортах и категориях
         async function loadData() {
             try {
                 const [cakesRes, categoriesRes] = await Promise.all([
@@ -439,20 +457,22 @@
             }
         }
 
+        // Рендер навигации по категориям
         function renderNav() {
             const nav = document.getElementById('category-nav');
-            let html = '<button data-category="all">Все</button>';
+            let html = `<button data-category="all">Все</button>`;
             for (let key in categories) {
-                html += '<span class="nav-cat-group">';
-                html += '<button data-category="' + key + '">' + categories[key] + '</button>';
-                html += '<button class="nav-cat-del" onclick="deleteCategory(\'' + key + '\')">×</button>';
-                html += '</span>';
+                html += `
+                <span class="nav-cat-group">
+                    <button data-category="${key}">${categories[key]}</button>
+                    <button class="nav-cat-del" onclick="deleteCategory('${key}')">×</button>
+                </span>`;
             }
             if (isAdmin) {
-                html += '<button class="add-cat-btn" onclick="showAddCategory()">+</button>';
+                html += `<button class="add-cat-btn" onclick="showAddCategory()">+</button>`;
             }
             nav.innerHTML = html;
-            const activeBtn = nav.querySelector('[data-category="' + currentFilter + '"]') || nav.querySelector('[data-category="all"]');
+            const activeBtn = nav.querySelector(`[data-category="${currentFilter}"]`) || nav.querySelector('[data-category="all"]');
             if (activeBtn) activeBtn.classList.add('active');
             nav.querySelectorAll('button').forEach(btn => {
                 btn.addEventListener('click', () => {
@@ -465,6 +485,7 @@
             });
         }
 
+        // Рендер списка тортов
         function renderCakes() {
             const grid = document.getElementById('cakes-grid');
             let filtered = cakes;
@@ -480,29 +501,29 @@
             let html = "";
             if (isAdmin) {
                 const cat = currentFilter === "all" ? "" : currentFilter;
-                html += '<div class="add-card-btn" onclick="showAddCake(\'' + cat + '\')"><span>+</span><span style="font-size:1rem;margin-top:10px;">Добавить торт</span></div>';
+                html += `<div class="add-card-btn" onclick="showAddCake('${cat}')"><span>+</span><span style="font-size:1rem;margin-top:10px;">Добавить торт</span></div>`;
             }
             filtered.forEach((cake, index) => {
                 const desc = cake.description || cake.desc || '';
                 const catName = categories[cake.category] || cake.category;
-                html += '<div class="cake-card" style="animation-delay:' + (0.05 * (index + 1)) + 's" onclick="showDetail(' + cake.id + ')">';
-                html += '<button class="delete-btn" onclick="event.stopPropagation();deleteCake(' + cake.id + ')">×</button>';
-                html += '<div class="cake-image">';
-                if (cake.image) {
-                    html += '<img src="' + cake.image + '" alt="' + cake.name + '">';
-                } else {
-                    html += '<span class="no-image">🎂</span>';
-                }
-                html += '</div><div class="cake-info">';
-                html += '<div class="cake-category">' + catName + '</div>';
-                html += '<h3 class="cake-name">' + cake.name + '</h3>';
-                html += '<p class="cake-desc">' + desc + '</p>';
-                html += '<div class="cake-price">' + cake.price.toLocaleString() + ' ₽</div>';
-                html += '</div></div>';
+                html += `
+                <div class="cake-card" style="animation-delay:${0.05 * (index + 1)}s" onclick="showDetail(${cake.id})">
+                    <button class="delete-btn" onclick="event.stopPropagation();deleteCake(${cake.id})">×</button>
+                    <div class="cake-image">
+                        ${cake.image ? `<img src="${cake.image}" alt="${cake.name}">` : '<span class="no-image">🎂</span>'}
+                    </div>
+                    <div class="cake-info">
+                        <div class="cake-category">${catName}</div>
+                        <h3 class="cake-name">${cake.name}</h3>
+                        <p class="cake-desc">${desc}</p>
+                        <div class="cake-price">${cake.price.toLocaleString()} ₽</div>
+                    </div>
+                </div>`;
             });
             grid.innerHTML = html;
         }
 
+        // Детальный просмотр торта
         function showDetail(id) {
             const cake = cakes.find(c => c.id === id);
             if (!cake) return;
@@ -511,31 +532,29 @@
             const catName = categories[cake.category] || cake.category;
             const similarList = cake.similar_ids || cake.similar || [];
             const similar = similarList.map(sid => cakes.find(c => c.id === sid)).filter(Boolean);
-            let contentHtml = '';
-            contentHtml += '<div class="detail-image">';
-            if (cake.image) {
-                contentHtml += '<img src="' + cake.image + '" alt="' + cake.name + '">';
-            } else {
-                contentHtml += '<div class="no-image"><span class="no-image">🎂</span></div>';
-            }
-            contentHtml += '</div><div class="detail-info">';
-            contentHtml += '<div class="cake-category">' + catName + '</div>';
-            contentHtml += '<h2 style="color:#111;">' + cake.name + '</h2>';
-            contentHtml += '<p style="margin:15px 0;color:#666;">' + desc + '</p>';
-            contentHtml += '<div class="detail-price">' + cake.price.toLocaleString() + ' ₽</div>';
-            contentHtml += '<div class="detail-fill"><strong>Начинка:</strong> ' + cake.fill + '</div></div>';
+            let contentHtml = `
+            <div class="detail-image">
+                ${cake.image ? `<img src="${cake.image}" alt="${cake.name}">` : '<div class="no-image"><span class="no-image">🎂</span></div>'}
+            </div>
+            <div class="detail-info">
+                <div class="cake-category">${catName}</div>
+                <h2 style="color:#111;">${cake.name}</h2>
+                <p style="margin:15px 0;color:#666;">${desc}</p>
+                <div class="detail-price">${cake.price.toLocaleString()} ₽</div>
+                <div class="detail-fill"><strong>Начинка:</strong> ${cake.fill}</div>
+            </div>`;
             if (similar.length > 0) {
-                contentHtml += '<div class="similar-cakes"><h3>Похожие варианты</h3><div class="similar-grid">';
-                similar.forEach(s => {
-                    contentHtml += '<div class="similar-item" onclick="showDetail(' + s.id + ')">';
-                    if (s.image) {
-                        contentHtml += '<img src="' + s.image + '" alt="' + s.name + '">';
-                    } else {
-                        contentHtml += '<div class="no-image"><span class="no-image">🎂</span></div>';
-                    }
-                    contentHtml += '<p>' + s.name + '</p></div>';
-                });
-                contentHtml += '</div></div>';
+                contentHtml += `
+                <div class="similar-cakes">
+                    <h3>Похожие варианты</h3>
+                    <div class="similar-grid">
+                        ${similar.map(s => `
+                        <div class="similar-item" onclick="showDetail(${s.id})">
+                            ${s.image ? `<img src="${s.image}" alt="${s.name}">` : '<div class="no-image"><span class="no-image">🎂</span></div>'}
+                            <p>${s.name}</p>
+                        </div>`).join('')}
+                    </div>
+                </div>`;
             }
             document.getElementById('detail-content').innerHTML = contentHtml;
             document.getElementById('detail-modal').classList.add('show');
@@ -548,17 +567,23 @@
         function checkPassword() { if (document.getElementById('admin-password').value === '1698') { closeLogin(); loginAdmin(); } else alert('Неверный пароль!'); }
         
         function loginAdmin() {
-            isAdmin = true; document.body.classList.add('admin-mode'); document.getElementById('admin-bar').classList.add('show');
-            renderCakes(); renderNav();
+            isAdmin = true;
+            document.body.classList.add('admin-mode');
+            document.getElementById('admin-bar').classList.add('show');
+            renderCakes();
+            renderNav();
         }
         function logoutAdmin() {
-            isAdmin = false; document.body.classList.remove('admin-mode'); document.getElementById('admin-bar').classList.remove('show');
-            renderCakes(); renderNav();
+            isAdmin = false;
+            document.body.classList.remove('admin-mode');
+            document.getElementById('admin-bar').classList.remove('show');
+            renderCakes();
+            renderNav();
         }
 
         async function deleteCake(id) {
             if (!confirm('Удалить торт?')) return;
-            const res = await fetch('/api/cakes/' + id + '?admin_pass=1698', { method: 'DELETE' });
+            const res = await fetch(`/api/cakes/${id}?admin_pass=1698`, { method: 'DELETE' });
             if (res.ok) { cakes = cakes.filter(c => c.id !== id); renderCakes(); }
         }
 
@@ -580,14 +605,14 @@
 
         async function deleteCategory(cat_key) {
             const hasCakes = cakes.some(c => c.category === cat_key);
-            const msg = hasCakes ? 'В категории "' + categories[cat_key] + '" есть торты (' + cakes.filter(c => c.category === cat_key).length + ' шт.). Удалить категорию и все торты в ней?' : 'Удалить категорию "' + categories[cat_key] + '"?';
+            const msg = hasCakes ? `В категории "${categories[cat_key]}" есть торты (${cakes.filter(c => c.category === cat_key).length} шт.). Удалить категорию и все торты в ней?` : `Удалить категорию "${categories[cat_key]}"?`;
             if (!confirm(msg)) return;
             if (hasCakes) {
                 const cakeIds = cakes.filter(c => c.category === cat_key).map(c => c.id);
-                for (const id of cakeIds) await fetch('/api/cakes/' + id + '?admin_pass=1698', { method: 'DELETE' });
+                for (const id of cakeIds) await fetch(`/api/cakes/${id}?admin_pass=1698`, { method: 'DELETE' });
                 cakes = cakes.filter(c => c.category !== cat_key);
             }
-            const res = await fetch('/api/categories/' + cat_key + '?admin_pass=1698', { method: 'DELETE' });
+            const res = await fetch(`/api/categories/${cat_key}?admin_pass=1698`, { method: 'DELETE' });
             if (res.ok) {
                 delete categories[cat_key];
                 if (currentFilter === cat_key) currentFilter = "all";
@@ -596,14 +621,15 @@
         }
 
         function showAddCake(category) {
-            tempImage = ""; document.getElementById('image-preview').innerHTML = '';
+            tempImage = "";
+            document.getElementById('image-preview').innerHTML = '';
             document.getElementById('new-cake-name').value = '';
             document.getElementById('new-cake-desc').value = '';
             document.getElementById('new-cake-fill').value = '';
             document.getElementById('new-cake-price').value = '';
             document.getElementById('new-cake-similar').value = '';
             const select = document.getElementById('new-cake-category');
-            select.innerHTML = Object.entries(categories).map(([key, name]) => '<option value="' + key + '" ' + (key === category ? 'selected' : '') + '>' + name + '</option>').join('');
+            select.innerHTML = Object.entries(categories).map(([key, name]) => `<option value="${key}" ${key === category ? 'selected' : ''}>${name}</option>`).join('');
             document.getElementById('add-cake-modal').classList.add('show');
         }
         function closeAddCake() { document.getElementById('add-cake-modal').classList.remove('show'); }
@@ -613,7 +639,7 @@
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     tempImage = e.target.result;
-                    document.getElementById('image-preview').innerHTML = '<img src="' + tempImage + '" style="width:100px;height:100px;object-fit:cover;border-radius:8px;">';
+                    document.getElementById('image-preview').innerHTML = `<img src="${tempImage}" style="width:100px;height:100px;object-fit:cover;border-radius:8px;">`;
                 };
                 reader.readAsDataURL(file);
             }
