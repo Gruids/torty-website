@@ -31,6 +31,37 @@
             cursor: pointer;
         }
 
+        /* Новый блок поиска выше категорий */
+        .search-section {
+            background: #fff;
+            padding: 15px 20px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .search-container {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .search-container input {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            outline: none;
+            width: 250px;
+            transition: border-color 0.3s;
+        }
+        .search-container input:focus { border-color: #111; }
+        .search-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2rem;
+            padding: 0 8px;
+            outline: none;
+        }
+
         header {
             background: #111111;
             padding: 0;
@@ -58,24 +89,15 @@
         h1 { font-size: 2.5rem; color: #ffffff; margin-bottom: 10px; font-weight: 300; letter-spacing: 4px; text-transform: uppercase; }
         .subtitle { color: #aaaaaa; font-size: 1rem; letter-spacing: 2px; }
 
+        /* Категории в исходном виде */
         nav {
             background: #fff;
             padding: 15px;
+            text-align: center;
             position: sticky;
             top: 0;
             z-index: 100;
             box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-        #nav-categories {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            gap: 5px;
         }
         nav button {
             background: none;
@@ -98,6 +120,7 @@
             padding: 0;
             line-height: 35px;
             font-size: 1.3rem;
+            margin-left: 10px;
             cursor: pointer;
         }
         body.admin-mode nav .add-cat-btn { display: inline-block; }
@@ -125,30 +148,12 @@
         body.admin-mode .nav-cat-del { display: inline-block; }
         .nav-cat-del:hover { background: #cc0000; }
 
-        .search-container {
-            display: flex;
-            align-items: center;
-            margin-left: auto;
-        }
-        .search-container input {
-            padding: 8px 12px;
-            border: 1px solid #ddd;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            outline: none;
-            width: 200px;
-            transition: border-color 0.3s;
-        }
-        .search-container input:focus {
-            border-color: #111;
-        }
-        .search-btn {
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 1.2rem;
-            padding: 0 8px;
-            outline: none;
+        /* Отступы при активном админ-баре */
+        .admin-bar.show ~ header,
+        .admin-bar.show ~ .search-section,
+        .admin-bar.show ~ nav,
+        .admin-bar.show ~ main {
+            margin-top: 50px;
         }
 
         main { max-width: 1200px; margin: 0 auto; padding: 30px 20px; }
@@ -211,11 +216,6 @@
             cursor: pointer;
             font-size: 1.2rem;
             z-index: 10;
-        }
-        .admin-bar.show ~ header,
-        .admin-bar.show ~ nav,
-        .admin-bar.show ~ main {
-            margin-top: 50px;
         }
         body.admin-mode .cake-card .delete-btn { display: block; }
 
@@ -363,14 +363,16 @@
         </div>
     </header>
 
-    <nav id="category-nav">
-        <div id="nav-categories">
-            <button class="active" data-category="all">Все</button>
-        </div>
+    <!-- Поиск выше категорий -->
+    <div class="search-section">
         <div class="search-container">
-            <input type="text" id="search-input" placeholder="Поиск тортов...">
+            <input type="text" id="search-input" placeholder="Поиск тортов (можно с опечатками)">
             <button id="search-btn" class="search-btn">🔍</button>
         </div>
+    </div>
+
+    <nav id="category-nav">
+        <button class="active" data-category="all">Все</button>
         <button class="add-cat-btn" onclick="showAddCategory()">+</button>
     </nav>
 
@@ -384,6 +386,7 @@
         <p>Заказ от 3 дней. Доставка по городу бесплатно.</p>
     </footer>
 
+    <!-- Модальные окна без изменений -->
     <div class="modal" id="order-modal">
         <div class="modal-content">
             <h2>Оформить заказ</h2>
@@ -507,6 +510,47 @@
         let currentFilter = "all";
         let searchQuery = "";
 
+        // Расстояние Левенштейна для поиска с опечатками
+        function levenshtein(a, b) {
+            a = a.toLowerCase();
+            b = b.toLowerCase();
+            if (a.length === 0) return b.length;
+            if (b.length === 0) return a.length;
+            const matrix = [];
+            for (let i = 0; i <= b.length; i++) matrix[i] = [i];
+            for (let j = 0; j <= a.length; j++) matrix[0][j] = j;
+            for (let i = 1; i <= b.length; i++) {
+                for (let j = 1; j <= a.length; j++) {
+                    matrix[i][j] = (b[i-1] === a[j-1]) 
+                        ? matrix[i-1][j-1] 
+                        : Math.min(matrix[i-1][j-1] + 1, matrix[i][j-1] + 1, matrix[i-1][j] + 1);
+                }
+            }
+            return matrix[b.length][a.length];
+        }
+
+        // Нечеткий поиск (допускает опечатки)
+        function fuzzyMatch(query, text, maxErrors = 2) {
+            if (!query || !text) return false;
+            query = query.toLowerCase().trim();
+            text = text.toLowerCase().trim();
+            
+            // Сначала проверяем точное вхождение
+            if (text.includes(query)) return true;
+            
+            const queryWords = query.split(/\s+/).filter(w => w.length > 0);
+            const textWords = text.split(/\s+/).filter(w => w.length > 0);
+            
+            for (const qw of queryWords) {
+                for (const tw of textWords) {
+                    const errors = levenshtein(qw, tw);
+                    const allowed = Math.min(maxErrors, Math.floor(tw.length * 0.2));
+                    if (errors <= allowed) return true;
+                }
+            }
+            return false;
+        }
+
         async function loadData() {
             try {
                 const [cakesRes, categoriesRes] = await Promise.all([
@@ -525,20 +569,29 @@
             }
         }
 
+        // Категории в исходном виде
         function renderNav() {
-            const navCategories = document.getElementById('nav-categories');
-            let html = '<button data-category="all" class="' + (currentFilter === 'all' ? 'active' : '') + '">Все</button>';
+            const nav = document.getElementById('category-nav');
+            let html = '<button data-category="all">Все</button>';
             for (let key in categories) {
                 html += '<span class="nav-cat-group">';
-                html += '<button data-category="' + key + '" class="' + (currentFilter === key ? 'active' : '') + '">' + categories[key] + '</button>';
+                html += '<button data-category="' + key + '">' + categories[key] + '</button>';
                 html += '<button class="nav-cat-del" onclick="deleteCategory(\'' + key + '\')" title="Удалить категорию">×</button>';
                 html += '</span>';
             }
-            navCategories.innerHTML = html;
+            if (isAdmin) {
+                html += '<button class="add-cat-btn" onclick="showAddCategory()">+</button>';
+            }
+            nav.innerHTML = html;
 
-            navCategories.querySelectorAll('button[data-category]').forEach(btn => {
+            const activeBtn = nav.querySelector('[data-category="' + currentFilter + '"]') || nav.querySelector('[data-category="all"]');
+            if (activeBtn) activeBtn.classList.add('active');
+
+            nav.querySelectorAll('button').forEach(btn => {
                 btn.addEventListener('click', () => {
-                    navCategories.querySelectorAll('button[data-category]').forEach(b => b.classList.remove('active'));
+                    if (btn.classList.contains('add-cat-btn')) return;
+                    if (btn.classList.contains('nav-cat-del')) return;
+                    nav.querySelectorAll('button').forEach(b => b.classList.remove('active'));
                     btn.classList.add('active');
                     currentFilter = btn.dataset.category || "all";
                     renderCakes();
@@ -550,17 +603,18 @@
             const grid = document.getElementById('cakes-grid');
             let filtered = cakes;
 
+            // Фильтр по категории
             if (currentFilter !== "all") {
                 filtered = filtered.filter(c => c.category === currentFilter);
             }
 
+            // Нечеткий поиск с исправлением опечаток
             if (searchQuery) {
-                const query = searchQuery.toLowerCase();
                 filtered = filtered.filter(c => {
-                    const name = (c.name || '').toLowerCase();
-                    const desc = (c.description || c.desc || '').toLowerCase();
-                    const catName = (categories[c.category] || c.category || '').toLowerCase();
-                    return name.includes(query) || desc.includes(query) || catName.includes(query);
+                    const name = c.name || '';
+                    const desc = c.description || c.desc || '';
+                    const catName = categories[c.category] || c.category || '';
+                    return fuzzyMatch(searchQuery, name) || fuzzyMatch(searchQuery, desc) || fuzzyMatch(searchQuery, catName);
                 });
             }
 
@@ -598,6 +652,7 @@
             grid.innerHTML = html;
         }
 
+        // Остальные функции (showDetail, login, addCake и т.д.) без изменений
         function showDetail(id) {
             const cake = cakes.find(c => c.id === id);
             if (!cake) return;
@@ -709,7 +764,7 @@
             document.getElementById('add-category-modal').classList.remove('show');
         }
 
-               async function addCategory() {
+        async function addCategory() {
             const name = document.getElementById('new-category-name').value.trim();
             const cat_key = document.getElementById('new-category-key').value.trim();
             if (!name || !cat_key) {
@@ -837,7 +892,7 @@
             if (e.target.id === 'order-modal') closeOrderModal();
         });
 
-        // Поиск
+        // Обработчики поиска
         document.getElementById('search-input').addEventListener('input', function() {
             searchQuery = this.value.trim();
             renderCakes();
