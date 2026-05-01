@@ -61,11 +61,21 @@
         nav {
             background: #fff;
             padding: 15px;
-            text-align: center;
             position: sticky;
             top: 0;
             z-index: 100;
             box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        #nav-categories {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 5px;
         }
         nav button {
             background: none;
@@ -88,7 +98,6 @@
             padding: 0;
             line-height: 35px;
             font-size: 1.3rem;
-            margin-left: 10px;
             cursor: pointer;
         }
         body.admin-mode nav .add-cat-btn { display: inline-block; }
@@ -115,6 +124,32 @@
         }
         body.admin-mode .nav-cat-del { display: inline-block; }
         .nav-cat-del:hover { background: #cc0000; }
+
+        .search-container {
+            display: flex;
+            align-items: center;
+            margin-left: auto;
+        }
+        .search-container input {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            outline: none;
+            width: 200px;
+            transition: border-color 0.3s;
+        }
+        .search-container input:focus {
+            border-color: #111;
+        }
+        .search-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2rem;
+            padding: 0 8px;
+            outline: none;
+        }
 
         main { max-width: 1200px; margin: 0 auto; padding: 30px 20px; }
         .cakes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; }
@@ -329,7 +364,13 @@
     </header>
 
     <nav id="category-nav">
-        <button class="active" data-category="all">Все</button>
+        <div id="nav-categories">
+            <button class="active" data-category="all">Все</button>
+        </div>
+        <div class="search-container">
+            <input type="text" id="search-input" placeholder="Поиск тортов...">
+            <button id="search-btn" class="search-btn">🔍</button>
+        </div>
         <button class="add-cat-btn" onclick="showAddCategory()">+</button>
     </nav>
 
@@ -464,6 +505,7 @@
         let tempImage = "";
         let isAdmin = false;
         let currentFilter = "all";
+        let searchQuery = "";
 
         async function loadData() {
             try {
@@ -484,42 +526,48 @@
         }
 
         function renderNav() {
-            const nav = document.getElementById('category-nav');
-            let html = '<button data-category="all">Все</button>';
+            const navCategories = document.getElementById('nav-categories');
+            let html = '<button data-category="all" class="' + (currentFilter === 'all' ? 'active' : '') + '">Все</button>';
             for (let key in categories) {
                 html += '<span class="nav-cat-group">';
-                html += '<button data-category="' + key + '">' + categories[key] + '</button>';
+                html += '<button data-category="' + key + '" class="' + (currentFilter === key ? 'active' : '') + '">' + categories[key] + '</button>';
                 html += '<button class="nav-cat-del" onclick="deleteCategory(\'' + key + '\')" title="Удалить категорию">×</button>';
                 html += '</span>';
             }
-            if (isAdmin) {
-                html += '<button class="add-cat-btn" onclick="showAddCategory()">+</button>';
-            }
-            nav.innerHTML = html;
+            navCategories.innerHTML = html;
 
-            const activeBtn = nav.querySelector('[data-category="' + currentFilter + '"]') || nav.querySelector('[data-category="all"]');
-            if (activeBtn) activeBtn.classList.add('active');
-
-            nav.querySelectorAll('button').forEach(btn => {
+            navCategories.querySelectorAll('button[data-category]').forEach(btn => {
                 btn.addEventListener('click', () => {
-                    if (btn.classList.contains('add-cat-btn')) return;
-                    if (btn.classList.contains('nav-cat-del')) return;
-                    nav.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+                    navCategories.querySelectorAll('button[data-category]').forEach(b => b.classList.remove('active'));
                     btn.classList.add('active');
                     currentFilter = btn.dataset.category || "all";
-                    renderCakes(currentFilter);
+                    renderCakes();
                 });
             });
         }
 
-        function renderCakes(filter) {
-            if (!filter) filter = "all";
+        function renderCakes() {
             const grid = document.getElementById('cakes-grid');
-            const filtered = filter === "all" ? cakes : cakes.filter(c => c.category === filter);
+            let filtered = cakes;
+
+            if (currentFilter !== "all") {
+                filtered = filtered.filter(c => c.category === currentFilter);
+            }
+
+            if (searchQuery) {
+                const query = searchQuery.toLowerCase();
+                filtered = filtered.filter(c => {
+                    const name = (c.name || '').toLowerCase();
+                    const desc = (c.description || c.desc || '').toLowerCase();
+                    const catName = (categories[c.category] || c.category || '').toLowerCase();
+                    return name.includes(query) || desc.includes(query) || catName.includes(query);
+                });
+            }
+
             let html = "";
 
             if (isAdmin) {
-                const cat = filter === "all" ? "" : filter;
+                const cat = currentFilter === "all" ? "" : currentFilter;
                 html += '<div class="add-card-btn" onclick="showAddCake(\'' + cat + '\')">';
                 html += '<span>+</span>';
                 html += '<span style="font-size:1rem;margin-top:10px;">Добавить торт</span>';
@@ -630,7 +678,7 @@
             isAdmin = true;
             document.body.classList.add('admin-mode');
             document.getElementById('admin-bar').classList.add('show');
-            renderCakes(currentFilter);
+            renderCakes();
             renderNav();
         }
 
@@ -638,7 +686,7 @@
             isAdmin = false;
             document.body.classList.remove('admin-mode');
             document.getElementById('admin-bar').classList.remove('show');
-            renderCakes(currentFilter);
+            renderCakes();
             renderNav();
         }
 
@@ -647,7 +695,7 @@
             const res = await fetch('/api/cakes/' + id + '?admin_pass=1698', { method: 'DELETE' });
             if (res.ok) {
                 cakes = cakes.filter(c => c.id !== id);
-                renderCakes(currentFilter);
+                renderCakes();
             }
         }
 
@@ -706,7 +754,7 @@
                 delete categories[cat_key];
                 if (currentFilter === cat_key) currentFilter = "all";
                 renderNav();
-                renderCakes(currentFilter);
+                renderCakes();
             } else {
                 alert('Ошибка при удалении категории');
             }
@@ -770,7 +818,7 @@
             if (res.ok) {
                 const newCake = await res.json();
                 cakes.push(newCake);
-                renderCakes(currentFilter);
+                renderCakes();
                 closeAddCake();
             } else {
                 const result = await res.json();
@@ -787,6 +835,16 @@
         });
         document.getElementById('order-modal').addEventListener('click', (e) => {
             if (e.target.id === 'order-modal') closeOrderModal();
+        });
+
+        // Поиск
+        document.getElementById('search-input').addEventListener('input', function() {
+            searchQuery = this.value.trim();
+            renderCakes();
+        });
+        document.getElementById('search-btn').addEventListener('click', function() {
+            searchQuery = document.getElementById('search-input').value.trim();
+            renderCakes();
         });
 
         loadData();
