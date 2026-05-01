@@ -5,341 +5,161 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Торты в Великом Новгороде</title>
     <style>
-        * { margin:0; padding:0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #ffffff; color: #333; }
-
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif; background:#fff; color:#333; }
+        
         .admin-bar {
-            display: none;
-            position: fixed;
-            top:0; left:0; width:100%;
-            padding: 10px 20px;
-            background: #333;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 300;
+            display:none; position:fixed; top:0; left:0; width:100%; padding:10px 20px;
+            background:#333; justify-content:space-between; align-items:center; z-index:300;
         }
-        .admin-bar.show { display: flex; }
-        .admin-bar span { color: #fff; font-size: 0.9rem; }
-        .admin-close-btn {
-            background: #ff4444; color: #fff;
-            border: none; padding: 8px 15px;
-            border-radius: 5px; cursor: pointer;
-        }
-
+        .admin-bar.show { display:flex; }
+        .admin-bar span { color:#fff; font-size:0.9rem; }
+        .admin-close-btn { background:#ff4444; color:#fff; border:none; padding:8px 15px; border-radius:5px; cursor:pointer; }
+        
         .search-section {
-            background: #fff;
-            padding: 15px 20px;
-            text-align: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            background:#fff; padding:15px 20px; text-align:center;
+            box-shadow:0 2px 5px rgba(0,0,0,0.05);
         }
-        .search-container {
-            display: inline-flex; align-items: center; gap: 5px;
-        }
+        .search-container { display:inline-flex; align-items:center; gap:5px; }
         .search-container input {
-            padding: 8px 12px; border: 1px solid #ddd;
-            border-radius: 20px; font-size: 0.9rem;
-            outline: none; width: 250px; transition: border-color 0.3s;
+            padding:8px 12px; border:1px solid #ddd; border-radius:20px;
+            font-size:0.9rem; outline:none; width:250px; transition:border-color 0.3s;
         }
-        .search-container input:focus { border-color: #111; }
-        .search-btn {
-            background: none; border: none; cursor: pointer;
-            font-size: 1.2rem; padding: 0 8px; outline: none;
-        }
-
+        .search-container input:focus { border-color:#111; }
+        .search-btn { background:none; border:none; cursor:pointer; font-size:1.2rem; padding:0 8px; outline:none; }
+        
         header {
-            background: #111111; padding:0;
-            text-align: center; position: relative;
-            overflow: hidden; animation: headerAnim 1s ease;
+            background:#111; padding:0; text-align:center; position:relative;
+            overflow:hidden; animation:headerAnim 1s ease;
         }
-        @keyframes headerAnim {
-            from { transform: translateY(-100%); }
-            to { transform: translateY(0); }
-        }
-        .header-inner { position: relative; z-index:2; padding: 40px 20px 35px; }
-        .header-swirls {
-            position: absolute; top:0; left:0;
-            width:100%; height:100%;
-            pointer-events: none; z-index:1;
-        }
-        h1 { font-size: 2.5rem; color: #ffffff; margin-bottom: 10px; font-weight:300; letter-spacing:4px; text-transform:uppercase; }
-        .subtitle { color: #aaaaaa; font-size:1rem; letter-spacing:2px; }
-
+        @keyframes headerAnim { from{transform:translateY(-100%)} to{transform:translateY(0)} }
+        .header-inner { position:relative; z-index:2; padding:40px 20px 35px; }
+        h1 { font-size:2.5rem; color:#fff; margin-bottom:10px; font-weight:300; letter-spacing:4px; text-transform:uppercase; }
+        .subtitle { color:#aaa; font-size:1rem; letter-spacing:2px; }
+        
         nav {
-            background: #fff; padding:15px;
-            text-align: center; position: sticky;
-            top:0; z-index:100;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            background:#fff; padding:15px; text-align:center; position:sticky;
+            top:0; z-index:100; box-shadow:0 2px 5px rgba(0,0,0,0.05);
         }
-        nav button {
-            background: none; border: none;
-            padding:10px 20px; margin:5px;
-            cursor: pointer; font-size:1rem;
-            color:#111; border-radius:25px;
-        }
+        nav button { background:none; border:none; padding:10px 20px; margin:5px; cursor:pointer; font-size:1rem; color:#111; border-radius:25px; }
         nav button:hover, nav button.active { background:#111; color:#fff; }
         nav .add-cat-btn {
-            display:none; background:#4CAF50; color:#fff;
-            width:35px; height:35px; border-radius:50%;
-            padding:0; line-height:35px; font-size:1.3rem;
-            margin-left:10px; cursor:pointer;
+            display:none; background:#4CAF50; color:#fff; width:35px; height:35px;
+            border-radius:50%; padding:0; line-height:35px; font-size:1.3rem; margin-left:10px; cursor:pointer;
         }
         body.admin-mode nav .add-cat-btn { display:inline-block; }
-        nav .nav-cat-group {
-            position:relative; display:inline-flex;
-            align-items:center; margin:5px;
-        }
+        nav .nav-cat-group { position:relative; display:inline-flex; align-items:center; margin:5px; }
         .nav-cat-del {
-            display:none; background:#ff4444; color:#fff;
-            border:none; width:20px; height:20px;
-            border-radius:50%; cursor:pointer;
-            font-size:0.75rem; line-height:20px;
+            display:none; background:#ff4444; color:#fff; border:none; width:20px; height:20px;
+            border-radius:50%; cursor:pointer; font-size:0.75rem; line-height:20px;
             text-align:center; padding:0; margin-left:4px;
         }
         body.admin-mode .nav-cat-del { display:inline-block; }
         .nav-cat-del:hover { background:#cc0000; }
-
+        
         .admin-bar.show ~ header,
         .admin-bar.show ~ .search-section,
         .admin-bar.show ~ nav,
         .admin-bar.show ~ main { margin-top:50px; }
-
+        
         main { max-width:1200px; margin:0 auto; padding:30px 20px; }
         .cakes-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(280px,1fr)); gap:25px; }
-
+        
         .cake-card {
-            background:#fff; border-radius:15px;
-            overflow:hidden; box-shadow:0 3px 15px rgba(0,0,0,0.08);
-            cursor:pointer; transition:transform 0.3s, box-shadow 0.3s;
-            position:relative; animation:cardPop 0.5s ease backwards;
+            background:#fff; border-radius:15px; overflow:hidden;
+            box-shadow:0 3px 15px rgba(0,0,0,0.08); cursor:pointer;
+            transition:transform 0.3s, box-shadow 0.3s; position:relative;
+            animation:cardPop 0.5s ease backwards;
         }
-        .cake-card:nth-child(1) { animation-delay:0.1s; }
-        .cake-card:nth-child(2) { animation-delay:0.15s; }
-        .cake-card:nth-child(3) { animation-delay:0.2s; }
-        .cake-card:nth-child(4) { animation-delay:0.25s; }
-        .cake-card:nth-child(5) { animation-delay:0.3s; }
-        .cake-card:nth-child(6) { animation-delay:0.35s; }
-        .cake-card:nth-child(7) { animation-delay:0.4s; }
-        .cake-card:nth-child(8) { animation-delay:0.45s; }
-        @keyframes cardPop {
-            from { opacity:0; transform:scale(0.8); }
-            to { opacity:1; transform:scale(1); }
-        }
+        @keyframes cardPop { from{opacity:0;transform:scale(0.8)} to{opacity:1;transform:scale(1)} }
         .cake-card:hover { transform:translateY(-5px); box-shadow:0 8px 25px rgba(0,0,0,0.15); }
-
+        .cake-card:nth-child(1){animation-delay:0.1s} .cake-card:nth-child(2){animation-delay:0.15s} .cake-card:nth-child(3){animation-delay:0.2s} .cake-card:nth-child(4){animation-delay:0.25s} .cake-card:nth-child(5){animation-delay:0.3s} .cake-card:nth-child(6){animation-delay:0.35s} .cake-card:nth-child(7){animation-delay:0.4s} .cake-card:nth-child(8){animation-delay:0.45s}
+        
         .add-card-btn {
-            background:#f5f5f5; border:2px dashed #ccc;
-            border-radius:15px; cursor:pointer; transition:all 0.3s;
-            min-height:280px; display:flex; flex-direction:column;
-            align-items:center; justify-content:center;
-            color:#999; font-size:3rem;
+            background:#f5f5f5; border:2px dashed #ccc; border-radius:15px;
+            cursor:pointer; transition:all 0.3s; min-height:280px;
+            display:flex; flex-direction:column; align-items:center;
+            justify-content:center; color:#999; font-size:3rem;
         }
         .add-card-btn:hover { border-color:#4CAF50; color:#4CAF50; }
         body:not(.admin-mode) .add-card-btn { display:none!important; }
         body.admin-mode .add-card-btn { display:flex!important; }
-
+        
         .cake-card .delete-btn {
-            display:none; position:absolute;
-            top:10px; right:10px;
-            background:#ff4444; color:#fff;
-            border:none; width:32px; height:32px;
-            border-radius:50%; cursor:pointer;
-            font-size:1.2rem; z-index:10;
+            display:none; position:absolute; top:10px; right:10px;
+            background:#ff4444; color:#fff; border:none;
+            width:32px; height:32px; border-radius:50%;
+            cursor:pointer; font-size:1.2rem; z-index:10;
         }
         body.admin-mode .cake-card .delete-btn { display:block; }
-
-        .cake-image {
-            width:100%; height:200px;
-            background:#e8d5c4;
-            display:flex; align-items:center; justify-content:center;
-            overflow:hidden;
-        }
+        
+        .cake-image { width:100%; height:200px; background:#e8d5c4; display:flex; align-items:center; justify-content:center; overflow:hidden; }
         .cake-image img { width:100%; height:100%; object-fit:cover; }
         .cake-image .no-image { font-size:3rem; color:#aaa; }
-
         .cake-info { padding:20px; }
         .cake-category { font-size:0.8rem; color:#888; text-transform:uppercase; margin-bottom:8px; letter-spacing:1px; }
         .cake-name { font-size:1.3rem; color:#111; margin-bottom:5px; }
         .cake-desc { color:#666; font-size:0.9rem; line-height:1.5; margin-bottom:10px; }
         .cake-price { font-size:1.4rem; color:#111; font-weight:bold; }
-
-        footer { background:#111; color:#ccc; padding:30px 20px; text-align:center; }
-
-        /* ========== ЧАТ СТИЛИ ========== */
-        .chat-widget { position:fixed; bottom:20px; right:20px; z-index:9999; }
         
-        .chat-btn {
-            background:#111; color:#fff;
-            border:none; border-radius:30px;
-            padding:12px 20px; cursor:pointer;
-            display:flex; align-items:center; gap:8px;
-            box-shadow:0 4px 15px rgba(0,0,0,0.2);
-            transition:all 0.3s; font-size:0.9rem;
+        footer { background:#111; color:#ccc; padding:30px 20px; text-align:center; }
+        
+        .chat-widget { position:fixed; bottom:20px; right:20px; z-index:9999; }
+        .chat-toggle {
+            background:#111; color:#fff; border:none; padding:12px 20px;
+            border-radius:25px; cursor:pointer; display:flex; align-items:center;
+            gap:8px; box-shadow:0 4px 12px rgba(0,0,0,0.15); font-size:0.9rem;
         }
-        .chat-btn:hover { background:#333; transform:translateY(-2px); }
-        .chat-btn .online-dot {
-            width:8px; height:8px;
-            background:#4CAF50; border-radius:50%;
-            animation: pulse 2s infinite;
-        }
-        @keyframes pulse {
-            0%,100% { opacity:1; }
-            50% { opacity:0.5; }
-        }
-        .chat-badge {
-            position:absolute; top:-8px; right:-8px;
-            background:#ff4444; color:#fff;
-            font-size:0.7rem; min-width:18px; height:18px;
-            border-radius:9px; display:none;
-            align-items:center; justify-content:center;
-            padding:0 4px;
-        }
-
+        .chat-toggle .status-dot { width:8px; height:8px; background:#4CAF50; border-radius:50%; display:inline-block; }
         .chat-window {
-            position:absolute; bottom:60px; right:0;
-            width:320px; height:450px;
-            background:#fff; border-radius:15px;
-            box-shadow:0 5px 30px rgba(0,0,0,0.2);
-            display:none; flex-direction:column;
-            overflow:hidden;
+            display:none; position:absolute; bottom:60px; right:0;
+            width:320px; height:450px; background:#fff; border-radius:15px;
+            box-shadow:0 8px 30px rgba(0,0,0,0.2); flex-direction:column; overflow:hidden;
         }
         .chat-window.open { display:flex; }
-
-        .chat-header {
-            background:#111; color:#fff;
-            padding:15px; display:flex;
-            justify-content:space-between; align-items:center;
-        }
-        .chat-header span { font-size:0.9rem; }
-        .chat-header .close-chat {
-            background:none; border:none; color:#fff;
-            font-size:1.2rem; cursor:pointer; padding:0 5px;
-        }
-
-        .chat-messages {
-            flex:1; overflow-y:auto; padding:15px;
-            display:flex; flex-direction:column; gap:10px;
-            background:#f5f5f5;
-        }
-        .msg {
-            max-width:80%; padding:10px 12px;
-            border-radius:12px; font-size:0.85rem;
-            line-height:1.4; word-wrap:break-word;
-        }
-        .msg.visitor {
-            background:#111; color:#fff;
-            align-self:flex-start; border-bottom-left-radius:4px;
-        }
-        .msg.admin {
-            background:#4CAF50; color:#fff;
-            align-self:flex-end; border-bottom-right-radius:4px;
-        }
-        .msg .time {
-            font-size:0.7rem; opacity:0.7;
-            margin-top:4px; text-align:right;
-        }
-
-        .chat-input {
-            padding:10px; border-top:1px solid #eee;
-            display:flex; gap:8px; background:#fff;
-        }
-        .chat-input input {
-            flex:1; border:1px solid #ddd;
-            border-radius:20px; padding:8px 12px;
-            outline:none; font-size:0.9rem;
-        }
-        .chat-input button {
-            background:#111; color:#fff;
-            border:none; border-radius:50%;
-            width:36px; height:36px;
-            cursor:pointer; font-size:1rem;
-        }
-
-        .chat-admin-panel {
-            display:none; padding:10px;
-            border-top:2px solid #4CAF50;
-            background:#f9f9f9;
-        }
-        body.admin-mode .chat-admin-panel { display:block; }
-        .chat-admin-panel select {
-            width:100%; padding:6px;
-            border:1px solid #ddd; border-radius:5px;
-            font-size:0.8rem; margin-bottom:5px;
-        }
-        .chat-admin-panel .reply-box {
-            display:flex; gap:5px;
-        }
-        .chat-admin-panel .reply-box input {
-            flex:1; border:1px solid #ddd;
-            border-radius:20px; padding:6px 10px;
-            font-size:0.8rem; outline:none;
-        }
-        .chat-admin-panel .reply-box button {
-            background:#4CAF50; color:#fff;
-            border:none; border-radius:50%;
-            width:30px; height:30px;
-            cursor:pointer; font-size:0.9rem;
-        }
-        /* ========== КОНЕЦ ЧАТ СТИЛИ ========== */
-
-        .modal {
-            display:none; position:fixed;
-            top:0; left:0; width:100%; height:100%;
-            background:rgba(0,0,0,0.5); z-index:1000;
-            align-items:center; justify-content:center;
-        }
+        .chat-header { background:#111; color:#fff; padding:15px; display:flex; justify-content:space-between; align-items:center; }
+        .chat-header h3 { font-size:1rem; font-weight:400; }
+        .chat-close { background:none; border:none; color:#fff; font-size:1.2rem; cursor:pointer; }
+        .chat-messages { flex:1; padding:15px; overflow-y:auto; display:flex; flex-direction:column; gap:10px; }
+        .msg { max-width:80%; padding:10px 14px; border-radius:15px; font-size:0.9rem; line-height:1.4; }
+        .msg.user { background:#f0f0f0; align-self:flex-start; border-bottom-left-radius:5px; }
+        .msg.admin { background:#111; color:#fff; align-self:flex-end; border-bottom-right-radius:5px; }
+        .chat-input-area { padding:10px; border-top:1px solid #eee; display:flex; gap:8px; }
+        .chat-input-area input { flex:1; padding:8px 12px; border:1px solid #ddd; border-radius:20px; outline:none; font-size:0.9rem; }
+        .chat-input-area button { background:#111; color:#fff; border:none; padding:8px 15px; border-radius:20px; cursor:pointer; }
+        .chat-unread { background:#ff4444; color:#fff; font-size:0.7rem; padding:2px 6px; border-radius:10px; margin-left:5px; }
+        
+        .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1000; align-items:center; justify-content:center; }
         .modal.show { display:flex; }
-        .modal-content {
-            background:#fff; padding:30px;
-            border-radius:15px; max-width:600px;
-            width:90%; max-height:90vh; overflow-y:auto;
-        }
+        .modal-content { background:#fff; padding:30px; border-radius:15px; max-width:600px; width:90%; max-height:90vh; overflow-y:auto; }
         .modal h2 { color:#111; margin-bottom:20px; }
         .form-group { margin-bottom:15px; }
         .form-group label { display:block; margin-bottom:5px; color:#111; }
-        .form-group input, .form-group textarea, .form-group select {
-            width:100%; padding:10px;
-            border:1px solid #ddd; border-radius:8px; font-size:1rem;
-        }
+        .form-group input, .form-group textarea, .form-group select { width:100%; padding:10px; border:1px solid #ddd; border-radius:8px; font-size:1rem; }
         .modal-buttons { display:flex; gap:10px; }
-        .modal-buttons button {
-            flex:1; padding:12px; border:none;
-            border-radius:8px; font-size:1rem; cursor:pointer;
-        }
+        .modal-buttons button { flex:1; padding:12px; border:none; border-radius:8px; font-size:1rem; cursor:pointer; }
         .submit-btn { background:#111; color:#fff; }
         .close-btn { background:#eee; color:#333; }
-
+        
         .detail-modal { max-width:900px; }
         .detail-content { display:flex; gap:30px; flex-wrap:wrap; }
         .detail-image { flex:1; min-width:300px; }
         .detail-image img { width:100%; border-radius:15px; }
-        .detail-image .no-image {
-            height:300px; background:#e8d5c4;
-            display:flex; align-items:center; justify-content:center;
-            border-radius:15px;
-        }
+        .detail-image .no-image { height:300px; background:#e8d5c4; display:flex; align-items:center; justify-content:center; border-radius:15px; }
         .detail-info { flex:1; min-width:250px; }
         .detail-price { font-size:2rem; color:#111; font-weight:bold; margin:15px 0; }
         .detail-fill { margin:10px 0; color:#666; }
         .detail-fill strong { color:#111; }
-
         .similar-cakes { margin-top:30px; width:100%; }
         .similar-cakes h3 { color:#111; margin-bottom:15px; }
         .similar-grid { display:flex; gap:15px; overflow-x:auto; padding-bottom:10px; }
         .similar-item { min-width:150px; text-align:center; cursor:pointer; }
         .similar-item img { width:100%; height:100px; object-fit:cover; border-radius:10px; }
-        .similar-item .no-image {
-            height:100px; background:#e8d5c4;
-            display:flex; align-items:center; justify-content:center;
-            border-radius:10px;
-        }
+        .similar-item .no-image { height:100px; background:#e8d5c4; display:flex; align-items:center; justify-content:center; border-radius:10px; }
         .similar-item p { font-size:0.8rem; margin-top:5px; color:#111; }
-
+        
         .add-cake-modal input[type="file"] { display:none; }
-        .upload-btn {
-            background:#4CAF50; color:#fff; border:none;
-            padding:10px 20px; border-radius:5px;
-            cursor:pointer; display:inline-block; margin-bottom:10px;
-        }
+        .upload-btn { background:#4CAF50; color:#fff; border:none; padding:10px 20px; border-radius:5px; cursor:pointer; display:inline-block; margin-bottom:10px; }
         .loading { text-align:center; padding:40px; color:#666; }
     </style>
 </head>
@@ -348,7 +168,6 @@
         <span>Режим админа</span>
         <button class="admin-close-btn" onclick="logoutAdmin()">× Выйти</button>
     </div>
-
     <button class="admin-btn" onclick="showLogin()" style="position:fixed;top:15px;right:15px;background:#666;color:#fff;border:none;padding:8px 15px;border-radius:5px;cursor:pointer;font-size:0.9rem;z-index:200;">Админ</button>
 
     <header>
@@ -411,60 +230,34 @@
         <p>Доставка по городу имеется</p>
     </footer>
 
-    <!-- ========== ЧАТ ========== -->
     <div class="chat-widget" id="chat-widget">
         <div class="chat-window" id="chat-window">
             <div class="chat-header">
-                <span>Чат с поддержкой</span>
-                <button class="close-chat" onclick="toggleChat()">×</button>
+                <h3>Напишите нам, мы онлайн</h3>
+                <button class="chat-close" onclick="toggleChat()">×</button>
             </div>
             <div class="chat-messages" id="chat-messages"></div>
-            <div class="chat-admin-panel" id="chat-admin-panel">
-                <select id="chat-session-select" onchange="switchSession()">
-                    <option value="">Выбрать диалог...</option>
-                </select>
-                <div class="reply-box">
-                    <input type="text" id="admin-reply" placeholder="Ответ клиенту...">
-                    <button onclick="sendAdminReply()">➤</button>
-                </div>
-            </div>
-            <div class="chat-input" id="chat-input-visitor">
-                <input type="text" id="chat-message" placeholder="Ваше сообщение...">
-                <button onclick="sendMessage()">➤</button>
+            <div class="chat-input-area">
+                <input type="text" id="chat-input" placeholder="Ваше сообщение..." onkeydown="if(event.key==='Enter')sendMessage()">
+                <button onclick="sendMessage()">Отпр</button>
             </div>
         </div>
-        <button class="chat-btn" id="chat-btn" onclick="toggleChat()">
-            <span class="online-dot"></span>
-            <span>Напишите нам, мы онлайн</span>
-            <span class="chat-badge" id="chat-badge">0</span>
+        <button class="chat-toggle" id="chat-toggle" onclick="toggleChat()">
+            <span class="status-dot"></span>
+            Чат с поддержкой
+            <span class="chat-unread" id="unread-count" style="display:none;">0</span>
         </button>
     </div>
 
-    <!-- Модальные окна -->
     <div class="modal" id="order-modal">
         <div class="modal-content">
             <h2>Оформить заказ</h2>
             <form id="order-form">
-                <div class="form-group">
-                    <label>Торт</label>
-                    <input type="text" id="order-cake-name" readonly>
-                </div>
-                <div class="form-group">
-                    <label>Ваше имя</label>
-                    <input type="text" name="name" required>
-                </div>
-                <div class="form-group">
-                    <label>Телефон</label>
-                    <input type="tel" name="phone" required>
-                </div>
-                <div class="form-group">
-                    <label>Дата</label>
-                    <input type="date" name="date" required>
-                </div>
-                <div class="form-group">
-                    <label>Комментарий</label>
-                    <textarea name="comment" rows="3"></textarea>
-                </div>
+                <div class="form-group"><label>Торт</label><input type="text" id="order-cake-name" readonly></div>
+                <div class="form-group"><label>Ваше имя</label><input type="text" name="name" required></div>
+                <div class="form-group"><label>Телефон</label><input type="tel" name="phone" required></div>
+                <div class="form-group"><label>Дата</label><input type="date" name="date" required></div>
+                <div class="form-group"><label>Комментарий</label><textarea name="comment" rows="3"></textarea></div>
                 <div class="modal-buttons">
                     <button type="button" class="close-btn" onclick="closeOrderModal()">Отмена</button>
                     <button type="submit" class="submit-btn">Отправить</button>
@@ -486,10 +279,7 @@
     <div class="modal" id="login-modal">
         <div class="modal-content">
             <h2>Вход в админ</h2>
-            <div class="form-group">
-                <label>Пароль</label>
-                <input type="password" id="admin-password">
-            </div>
+            <div class="form-group"><label>Пароль</label><input type="password" id="admin-password"></div>
             <div class="modal-buttons">
                 <button class="close-btn" onclick="closeLogin()">Отмена</button>
                 <button class="submit-btn" onclick="checkPassword()">Войти</button>
@@ -500,14 +290,8 @@
     <div class="modal" id="add-category-modal">
         <div class="modal-content">
             <h2>Добавить категорию</h2>
-            <div class="form-group">
-                <label>Название</label>
-                <input type="text" id="new-category-name">
-            </div>
-            <div class="form-group">
-                <label>Ключ (eng)</label>
-                <input type="text" id="new-category-key">
-            </div>
+            <div class="form-group"><label>Название</label><input type="text" id="new-category-name"></div>
+            <div class="form-group"><label>Ключ (eng)</label><input type="text" id="new-category-key"></div>
             <div class="modal-buttons">
                 <button class="close-btn" onclick="closeAddCategory()">Отмена</button>
                 <button class="submit-btn" onclick="addCategory()">Добавить</button>
@@ -524,30 +308,12 @@
                 <label class="upload-btn" for="new-cake-image-input">Выбрать фото</label>
                 <div id="image-preview" style="margin-bottom:10px;"></div>
             </div>
-            <div class="form-group">
-                <label>Название</label>
-                <input type="text" id="new-cake-name">
-            </div>
-            <div class="form-group">
-                <label>Категория</label>
-                <select id="new-cake-category"></select>
-            </div>
-            <div class="form-group">
-                <label>Описание</label>
-                <textarea id="new-cake-desc" rows="2"></textarea>
-            </div>
-            <div class="form-group">
-                <label>Начинка</label>
-                <input type="text" id="new-cake-fill">
-            </div>
-            <div class="form-group">
-                <label>Цена (₽)</label>
-                <input type="number" id="new-cake-price">
-            </div>
-            <div class="form-group">
-                <label>Похожие (id через запятую)</label>
-                <input type="text" id="new-cake-similar" placeholder="1,2,3">
-            </div>
+            <div class="form-group"><label>Название</label><input type="text" id="new-cake-name"></div>
+            <div class="form-group"><label>Категория</label><select id="new-cake-category"></select></div>
+            <div class="form-group"><label>Описание</label><textarea id="new-cake-desc" rows="2"></textarea></div>
+            <div class="form-group"><label>Начинка</label><input type="text" id="new-cake-fill"></div>
+            <div class="form-group"><label>Цена (₽)</label><input type="number" id="new-cake-price"></div>
+            <div class="form-group"><label>Похожие (id через запятую)</label><input type="text" id="new-cake-similar" placeholder="1,2,3"></div>
             <div class="modal-buttons">
                 <button class="close-btn" onclick="closeAddCake()">Отмена</button>
                 <button class="submit-btn" onclick="addCake()">Добавить</button>
@@ -563,140 +329,330 @@
         let isAdmin = false;
         let currentFilter = "all";
         let searchQuery = "";
-
-        // ========== ЧАТ ==========
-        let chatSessionId = localStorage.getItem('chat_session') || 'visitor_' + Date.now();
         let chatOpen = false;
         let unreadCount = 0;
-        let currentChatSession = chatSessionId;
-        let allSessions = {};
-
-        localStorage.setItem('chat_session', chatSessionId);
-
-        function toggleChat() {
-            const win = document.getElementById('chat-window');
-            chatOpen = !chatOpen;
-            win.classList.toggle('open', chatOpen);
-            if (chatOpen) {
-                document.getElementById('chat-badge').style.display = 'none';
-                unreadCount = 0;
-                loadMessages();
-            }
-        }
-
-        async function sendMessage() {
-            const input = document.getElementById('chat-message');
-            const text = input.value.trim();
-            if (!text) return;
-
-            await fetch('/api/chat', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    session_id: chatSessionId,
-                    sender: 'visitor',
-                    message: text
-                })
-            });
-
-            input.value = '';
-            loadMessages();
-        }
-
-        async function sendAdminReply() {
-            const input = document.getElementById('admin-reply');
-            const text = input.value.trim();
-            if (!text || !currentChatSession) return;
-
-            await fetch('/api/chat', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    session_id: currentChatSession,
-                    sender: 'admin',
-                    message: text
-                })
-            });
-
-            input.value = '';
-            loadMessages();
-        }
-
-        async function loadMessages() {
-            const res = await fetch('/api/chat?session_id=' + currentChatSession);
-            const msgs = await res.json();
-            const container = document.getElementById('chat-messages');
-            container.innerHTML = '';
-
-            msgs.forEach(m => {
-                const div = document.createElement('div');
-                div.className = 'msg ' + m.sender;
-                div.innerHTML = m.message + '<div class="time">' + new Date(m.created_at).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}) + '</div>';
-                container.appendChild(div);
-            });
-            container.scrollTop = container.scrollHeight;
-        }
-
-        async function loadSessions() {
-            if (!isAdmin) return;
-            const res = await fetch('/api/chat/sessions');
-            const sessions = await res.json();
-            const select = document.getElementById('chat-session-select');
-            select.innerHTML = '<option value="">Выбрать диалог...</option>';
-            
-            allSessions = {};
-            sessions.forEach(s => {
-                allSessions[s.session_id] = s;
-                const lastMsg = s.last_message ? s.last_message.substring(0,30) + '...' : 'Нет сообщений';
-                select.innerHTML += '<option value="' + s.session_id + '">' + s.session_id.substring(0,15) + '... — ' + lastMsg + '</option>';
-            });
-        }
-
-        function switchSession() {
-            const select = document.getElementById('chat-session-select');
-            currentChatSession = select.value;
-            if (currentChatSession) loadMessages();
-        }
-
-        function checkNewMessages() {
-            if (isAdmin) {
-                loadSessions();
-            } else {
-                // Проверяем новые ответы админа
-                fetch('/api/chat?session_id=' + chatSessionId + '&since=' + Date.now())
-                    .then(r => r.json())
-                    .then(msgs => {
-                        const adminMsgs = msgs.filter(m => m.sender === 'admin');
-                        if (adminMsgs.length > 0 && !chatOpen) {
-                            unreadCount += adminMsgs.length;
-                            const badge = document.getElementById('chat-badge');
-                            badge.textContent = unreadCount;
-                            badge.style.display = 'flex';
-                        }
-                    });
-            }
-        }
-
-        // ========== КОНЕЦ ЧАТ ==========
 
         function levenshtein(a, b) {
-            a = a.toLowerCase(); b = b.toLowerCase();
+            a = a.toLowerCase();
+            b = b.toLowerCase();
             if (a.length === 0) return b.length;
             if (b.length === 0) return a.length;
             const matrix = [];
-            for (let i=0; i<=b.length; i++) matrix[i] = [i];
-            for (let j=0; j<=a.length; j++) matrix[0][j] = j;
-            for (let i=1; i<=b.length; i++) {
-                for (let j=1; j<=a.length; j++) {
-                    matrix[i][j] = (b[i-1]===a[j-1]) ? matrix[i-1][j-1] : Math.min(matrix[i-1][j-1]+1, matrix[i][j-1]+1, matrix[i-1][j]+1);
+            for (let i = 0; i <= b.length; i++) matrix[i] = [i];
+            for (let j = 0; j <= a.length; j++) matrix[0][j] = j;
+            for (let i = 1; i <= b.length; i++) {
+                for (let j = 1; j <= a.length; j++) {
+                    matrix[i][j] = (b[i-1] === a[j-1]) ? matrix[i-1][j-1] : Math.min(matrix[i-1][j-1] + 1, matrix[i][j-1] + 1, matrix[i-1][j] + 1);
                 }
             }
             return matrix[b.length][a.length];
         }
 
-        function fuzzyMatch(query, text, maxErrors=2) {
+        function fuzzyMatch(query, text, maxErrors = 2) {
             if (!query || !text) return false;
             query = query.toLowerCase().trim();
             text = text.toLowerCase().trim();
             if (text.includes(query)) return true;
-            const qw = query.split(/\s+/).filter(w=>w.length>0);
+            const queryWords = query.split(/\s+/).filter(w => w.length > 0);
+            const textWords = text.split(/\s+/).filter(w => w.length > 0);
+            for (const qw of queryWords) {
+                for (const tw of textWords) {
+                    const errors = levenshtein(qw, tw);
+                    const allowed = Math.min(maxErrors, Math.floor(tw.length * 0.2));
+                    if (errors <= allowed) return true;
+                }
+            }
+            return false;
+        }
+
+        function toggleChat() {
+            chatOpen = !chatOpen;
+            document.getElementById('chat-window').classList.toggle('open', chatOpen);
+            if (chatOpen) {
+                unreadCount = 0;
+                document.getElementById('unread-count').style.display = 'none';
+                loadMessages();
+            }
+        }
+
+        async function loadMessages() {
+            try {
+                const res = await fetch('/api/chat');
+                const msgs = await res.json();
+                renderMessages(msgs);
+            } catch(e) { console.error(e); }
+        }
+
+        function renderMessages(msgs) {
+            const container = document.getElementById('chat-messages');
+            container.innerHTML = '';
+            msgs.forEach(m => {
+                const div = document.createElement('div');
+                div.className = 'msg ' + (m.is_admin ? 'admin' : 'user');
+                div.textContent = m.message;
+                container.appendChild(div);
+            });
+            container.scrollTop = container.scrollHeight;
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById('chat-input');
+            const text = input.value.trim();
+            if (!text) return;
+            await fetch('/api/chat', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({sender: isAdmin ? 'admin' : 'user', message: text, is_admin: isAdmin})
+            });
+            input.value = '';
+            loadMessages();
+        }
+
+        setInterval(() => {
+            if (isAdmin && !chatOpen) {
+                fetch('/api/chat?unread=1').then(r => r.json()).then(data => {
+                    if (data.count > 0) {
+                        unreadCount = data.count;
+                        const el = document.getElementById('unread-count');
+                        el.textContent = unreadCount;
+                        el.style.display = 'inline';
+                    }
+                });
+            }
+        }, 5000);
+
+        async function loadData() {
+            try {
+                const [cakesRes, categoriesRes] = await Promise.all([
+                    fetch('/api/cakes'),
+                    fetch('/api/categories')
+                ]);
+                cakes = await cakesRes.json();
+                categories = await categoriesRes.json();
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('cakes-grid').style.display = 'grid';
+                renderNav();
+                renderCakes();
+            } catch (error) {
+                document.getElementById('loading').textContent = 'Ошибка загрузки данных';
+                console.error(error);
+            }
+        }
+
+        function renderNav() {
+            const nav = document.getElementById('category-nav');
+            let html = '<button data-category="all">Все</button>';
+            for (let key in categories) {
+                html += '<span class="nav-cat-group">';
+                html += '<button data-category="' + key + '">' + categories[key] + '</button>';
+                html += '<button class="nav-cat-del" onclick="deleteCategory(\'' + key + '\')">×</button>';
+                html += '</span>';
+            }
+            if (isAdmin) {
+                html += '<button class="add-cat-btn" onclick="showAddCategory()">+</button>';
+            }
+            nav.innerHTML = html;
+            const activeBtn = nav.querySelector('[data-category="' + currentFilter + '"]') || nav.querySelector('[data-category="all"]');
+            if (activeBtn) activeBtn.classList.add('active');
+            nav.querySelectorAll('button').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    if (btn.classList.contains('add-cat-btn') || btn.classList.contains('nav-cat-del')) return;
+                    nav.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    currentFilter = btn.dataset.category || "all";
+                    renderCakes();
+                });
+            });
+        }
+
+        function renderCakes() {
+            const grid = document.getElementById('cakes-grid');
+            let filtered = cakes;
+            if (currentFilter !== "all") filtered = filtered.filter(c => c.category === currentFilter);
+            if (searchQuery) {
+                filtered = filtered.filter(c => {
+                    const name = c.name || '';
+                    const desc = c.description || c.desc || '';
+                    const catName = categories[c.category] || c.category || '';
+                    return fuzzyMatch(searchQuery, name) || fuzzyMatch(searchQuery, desc) || fuzzyMatch(searchQuery, catName);
+                });
+            }
+            let html = "";
+            if (isAdmin) {
+                const cat = currentFilter === "all" ? "" : currentFilter;
+                html += '<div class="add-card-btn" onclick="showAddCake(\'' + cat + '\')"><span>+</span><span style="font-size:1rem;margin-top:10px;">Добавить торт</span></div>';
+            }
+            filtered.forEach((cake, index) => {
+                const desc = cake.description || cake.desc || '';
+                const catName = categories[cake.category] || cake.category;
+                html += '<div class="cake-card" style="animation-delay:' + (0.05 * (index + 1)) + 's" onclick="showDetail(' + cake.id + ')">';
+                html += '<button class="delete-btn" onclick="event.stopPropagation();deleteCake(' + cake.id + ')">×</button>';
+                html += '<div class="cake-image">';
+                if (cake.image) {
+                    html += '<img src="' + cake.image + '" alt="' + cake.name + '">';
+                } else {
+                    html += '<span class="no-image">🎂</span>';
+                }
+                html += '</div><div class="cake-info">';
+                html += '<div class="cake-category">' + catName + '</div>';
+                html += '<h3 class="cake-name">' + cake.name + '</h3>';
+                html += '<p class="cake-desc">' + desc + '</p>';
+                html += '<div class="cake-price">' + cake.price.toLocaleString() + ' ₽</div>';
+                html += '</div></div>';
+            });
+            grid.innerHTML = html;
+        }
+
+        function showDetail(id) {
+            const cake = cakes.find(c => c.id === id);
+            if (!cake) return;
+            currentDetailCake = cake;
+            const desc = cake.description || cake.desc || '';
+            const catName = categories[cake.category] || cake.category;
+            const similarList = cake.similar_ids || cake.similar || [];
+            const similar = similarList.map(sid => cakes.find(c => c.id === sid)).filter(Boolean);
+            let contentHtml = '';
+            contentHtml += '<div class="detail-image">';
+            if (cake.image) {
+                contentHtml += '<img src="' + cake.image + '" alt="' + cake.name + '">';
+            } else {
+                contentHtml += '<div class="no-image"><span class="no-image">🎂</span></div>';
+            }
+            contentHtml += '</div><div class="detail-info">';
+            contentHtml += '<div class="cake-category">' + catName + '</div>';
+            contentHtml += '<h2 style="color:#111;">' + cake.name + '</h2>';
+            contentHtml += '<p style="margin:15px 0;color:#666;">' + desc + '</p>';
+            contentHtml += '<div class="detail-price">' + cake.price.toLocaleString() + ' ₽</div>';
+            contentHtml += '<div class="detail-fill"><strong>Начинка:</strong> ' + cake.fill + '</div></div>';
+            if (similar.length > 0) {
+                contentHtml += '<div class="similar-cakes"><h3>Похожие варианты</h3><div class="similar-grid">';
+                similar.forEach(s => {
+                    contentHtml += '<div class="similar-item" onclick="showDetail(' + s.id + ')">';
+                    if (s.image) {
+                        contentHtml += '<img src="' + s.image + '" alt="' + s.name + '">';
+                    } else {
+                        contentHtml += '<div class="no-image"><span class="no-image">🎂</span></div>';
+                    }
+                    contentHtml += '<p>' + s.name + '</p></div>';
+                });
+                contentHtml += '</div></div>';
+            }
+            document.getElementById('detail-content').innerHTML = contentHtml;
+            document.getElementById('detail-modal').classList.add('show');
+        }
+
+        function closeDetail() { document.getElementById('detail-modal').classList.remove('show'); currentDetailCake = null; }
+        function orderFromDetail() { if (currentDetailCake) { document.getElementById('order-cake-name').value = currentDetailCake.name; document.getElementById('order-modal').classList.add('show'); } }
+        function showLogin() { document.getElementById('login-modal').classList.add('show'); document.getElementById('admin-password').value = ''; }
+        function closeLogin() { document.getElementById('login-modal').classList.remove('show'); }
+        function checkPassword() { if (document.getElementById('admin-password').value === '1698') { closeLogin(); loginAdmin(); } else alert('Неверный пароль!'); }
+        
+        function loginAdmin() {
+            isAdmin = true; document.body.classList.add('admin-mode'); document.getElementById('admin-bar').classList.add('show');
+            renderCakes(); renderNav();
+        }
+        function logoutAdmin() {
+            isAdmin = false; document.body.classList.remove('admin-mode'); document.getElementById('admin-bar').classList.remove('show');
+            renderCakes(); renderNav();
+        }
+
+        async function deleteCake(id) {
+            if (!confirm('Удалить торт?')) return;
+            const res = await fetch('/api/cakes/' + id + '?admin_pass=1698', { method: 'DELETE' });
+            if (res.ok) { cakes = cakes.filter(c => c.id !== id); renderCakes(); }
+        }
+
+        function showAddCategory() { document.getElementById('new-category-name').value = ''; document.getElementById('new-category-key').value = ''; document.getElementById('add-category-modal').classList.add('show'); }
+        function closeAddCategory() { document.getElementById('add-category-modal').classList.remove('show'); }
+        async function addCategory() {
+            const name = document.getElementById('new-category-name').value.trim();
+            const cat_key = document.getElementById('new-category-key').value.trim();
+            if (!name || !cat_key) { alert('Заполни оба поля'); return; }
+            const res = await fetch('/api/categories', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({cat_key, name, admin_pass: '1698'})
+            });
+            const result = await res.json();
+            if (res.ok) { categories[cat_key] = name; renderNav(); closeAddCategory(); }
+            else alert('Ошибка: ' + (result.error || 'Не удалось добавить категорию'));
+        }
+
+        async function deleteCategory(cat_key) {
+            const hasCakes = cakes.some(c => c.category === cat_key);
+            const msg = hasCakes ? 'В категории "' + categories[cat_key] + '" есть торты (' + cakes.filter(c => c.category === cat_key).length + ' шт.). Удалить категорию и все торты в ней?' : 'Удалить категорию "' + categories[cat_key] + '"?';
+            if (!confirm(msg)) return;
+            if (hasCakes) {
+                const cakeIds = cakes.filter(c => c.category === cat_key).map(c => c.id);
+                for (const id of cakeIds) await fetch('/api/cakes/' + id + '?admin_pass=1698', { method: 'DELETE' });
+                cakes = cakes.filter(c => c.category !== cat_key);
+            }
+            const res = await fetch('/api/categories/' + cat_key + '?admin_pass=1698', { method: 'DELETE' });
+            if (res.ok) {
+                delete categories[cat_key];
+                if (currentFilter === cat_key) currentFilter = "all";
+                renderNav(); renderCakes();
+            } else alert('Ошибка при удалении категории');
+        }
+
+        function showAddCake(category) {
+            tempImage = ""; document.getElementById('image-preview').innerHTML = '';
+            document.getElementById('new-cake-name').value = '';
+            document.getElementById('new-cake-desc').value = '';
+            document.getElementById('new-cake-fill').value = '';
+            document.getElementById('new-cake-price').value = '';
+            document.getElementById('new-cake-similar').value = '';
+            const select = document.getElementById('new-cake-category');
+            select.innerHTML = Object.entries(categories).map(([key, name]) => '<option value="' + key + '" ' + (key === category ? 'selected' : '') + '>' + name + '</option>').join('');
+            document.getElementById('add-cake-modal').classList.add('show');
+        }
+        function closeAddCake() { document.getElementById('add-cake-modal').classList.remove('show'); }
+        function previewImage() {
+            const file = document.getElementById('new-cake-image-input').files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    tempImage = e.target.result;
+                    document.getElementById('image-preview').innerHTML = '<img src="' + tempImage + '" style="width:100px;height:100px;object-fit:cover;border-radius:8px;">';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+        async function addCake() {
+            const name = document.getElementById('new-cake-name').value.trim();
+            const category = document.getElementById('new-cake-category').value;
+            const description = document.getElementById('new-cake-desc').value.trim();
+            const fill = document.getElementById('new-cake-fill').value.trim();
+            const price = parseInt(document.getElementById('new-cake-price').value) || 0;
+            const similarStr = document.getElementById('new-cake-similar').value.trim();
+            const similar_ids = similarStr ? similarStr.split(',').map(s => parseInt(s.trim())).filter(n => n) : [];
+            if (!name) { alert('Введи название торта'); return; }
+            if (price <= 0) { alert('Введи цену'); return; }
+            const res = await fetch('/api/cakes', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({name, category, description, fill, price, similar_ids, image: tempImage})
+            });
+            if (res.ok) {
+                const newCake = await res.json();
+                cakes.push(newCake);
+                renderCakes();
+                closeAddCake();
+            } else {
+                const result = await res.json();
+                alert('Ошибка: ' + (result.error || 'Неизвестная ошибка'));
+            }
+        }
+
+        function closeOrderModal() { document.getElementById('order-modal').classList.remove('show'); }
+        document.getElementById('order-form').addEventListener('submit', (e) => {
+            e.preventDefault(); alert('Заявка отправлена! Мы свяжемся с вами.'); closeOrderModal(); e.target.reset();
+        });
+        document.getElementById('order-modal').addEventListener('click', (e) => { if (e.target.id === 'order-modal') closeOrderModal(); });
+        document.getElementById('search-input').addEventListener('input', function() { searchQuery = this.value.trim(); renderCakes(); });
+        document.getElementById('search-btn').addEventListener('click', function() { searchQuery = document.getElementById('search-input').value.trim(); renderCakes(); });
+        
+        loadData();
+    </script>
+</body>
+</html>
