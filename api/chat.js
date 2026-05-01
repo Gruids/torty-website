@@ -1,31 +1,39 @@
-// В GET запросе:
-if (req.method === 'GET') {
-    let query = supabase.from('chat_messages').select('*').order('created_at', { ascending: true }).limit(100);
+const { createClient } = require('@supabase/supabase-js');
+const supabase = createClient(
+  'https://tdfiimnmvovxfbesgjij.supabase.co',
+  'sb_secret_EEZ5HeRTbH0x0YQODJZBCA_AfvJ2s9B'
+);
 
-    if (req.query.user_id) {
-        // Если передан user_id — фильтруем
-        query = query.eq('user_id', req.query.user_id);
-    } 
-    // Если ?all=1 — возвращаем все (для админа, лучше добавить проверку пароля, но пока так)
-    else if (!req.query.unread) {
-        // Обычный запрос без ID — возвращаем пустой массив, чтобы не видели чужое
-        return res.json([]); 
-    }
+module.exports = async (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  if (req.method === 'OPTIONS') return res.status(200).end();
 
-    const { data, error } = await query;
+  // ЧТЕНИЕ СООБЩЕНИЙ
+  if (req.method === 'GET') {
+    const { data, error } = await supabase
+      .from('chat_messages')
+      .select('*')
+      .order('created_at', { ascending: true });
     if (error) return res.status(500).json({ error: error.message });
     return res.json(data || []);
-}
+  }
 
-// В POST запросе:
-if (req.method === 'POST') {
-    const { sender, message, is_admin, user_id } = req.body;
-    if (!message) return res.status(400).json({ error: 'Сообщение пустое' });
-    
-    const { data, error } = await supabase.from('chat_messages').insert([{ 
-        sender, message, is_admin, user_id: user_id || null 
-    }]).select().single();
-    
+  // ОТПРАВКА СООБЩЕНИЯ
+  if (req.method === 'POST') {
+    const { sender, message, user_id } = req.body;
+    if (!message) return res.status(400).json({ error: 'Пусто' });
+
+    const { data, error } = await supabase
+      .from('chat_messages')
+      .insert([{ sender, message, user_id }])
+      .select()
+      .single();
+
     if (error) return res.status(500).json({ error: error.message });
     return res.json(data);
-}
+  }
+
+  return res.status(405).json({ error: 'Method not allowed' });
+};
