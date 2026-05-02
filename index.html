@@ -19,54 +19,30 @@
         .admin-bar span { color: #fff; font-size: 0.9rem; }
         .admin-close-btn { background: #ff4444; color: #fff; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; }
 
-        .search-section {
-            background: #fff; padding: 15px 20px; text-align: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        }
+        .search-section { background: #fff; padding: 15px 20px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         .search-container { display: inline-flex; align-items: center; gap: 5px; }
-        .search-container input {
-            padding: 8px 12px; border: 1px solid #ddd; border-radius: 20px;
-            font-size: 0.9rem; outline: none; width: 250px; transition: border-color 0.3s;
-        }
+        .search-container input { padding: 8px 12px; border: 1px solid #ddd; border-radius: 20px; font-size: 0.9rem; outline: none; width: 250px; transition: border-color 0.3s; }
         .search-container input:focus { border-color: #111; }
         .search-btn { background: none; border: none; cursor: pointer; font-size: 1.2rem; padding: 0 8px; outline: none; }
 
-        header {
-            background: #111111; padding: 0; text-align: center; position: relative;
-            overflow: hidden; animation: headerAnim 1s ease;
-        }
+        header { background: #111111; padding: 0; text-align: center; position: relative; overflow: hidden; animation: headerAnim 1s ease; }
         @keyframes headerAnim { from { transform: translateY(-100%); } to { transform: translateY(0); } }
         .header-inner { position: relative; z-index: 2; padding: 40px 20px 35px; }
         .header-swirls { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
         h1 { font-size: 2.5rem; color: #ffffff; margin-bottom: 10px; font-weight: 300; letter-spacing: 4px; text-transform: uppercase; }
         .subtitle { color: #aaaaaa; font-size: 1rem; letter-spacing: 2px; }
 
-        nav {
-            background: #fff; padding: 15px; text-align: center; position: sticky;
-            top: 0; z-index: 100; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        }
-        nav button {
-            background: none; border: none; padding: 10px 20px; margin: 5px;
-            cursor: pointer; font-size: 1rem; color: #111; border-radius: 25px;
-        }
+        nav { background: #fff; padding: 15px; text-align: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        nav button { background: none; border: none; padding: 10px 20px; margin: 5px; cursor: pointer; font-size: 1rem; color: #111; border-radius: 25px; }
         nav button:hover, nav button.active { background: #111; color: #fff; }
-        nav .add-cat-btn {
-            display: none; background: #4CAF50; color: #fff; width: 35px; height: 35px;
-            border-radius: 50%; padding: 0; line-height: 35px; font-size: 1.3rem;
-            margin-left: 10px; cursor: pointer;
-        }
+        nav .add-cat-btn { display: none; background: #4CAF50; color: #fff; width: 35px; height: 35px; border-radius: 50%; padding: 0; line-height: 35px; font-size: 1.3rem; margin-left: 10px; cursor: pointer; }
         body.admin-mode nav .add-cat-btn { display: inline-block; }
         nav .nav-cat-group { position: relative; display: inline-flex; align-items: center; margin: 5px; }
-        .nav-cat-del {
-            display: none; background: #ff4444; color: #fff; border: none;
-            width: 20px; height: 20px; border-radius: 50%; cursor: pointer;
-            font-size: 0.75rem; line-height: 20px; text-align: center; padding: 0; margin-left: 4px;
-        }
+        .nav-cat-del { display: none; background: #ff4444; color: #fff; border: none; width: 20px; height: 20px; border-radius: 50%; cursor: pointer; font-size: 0.75rem; line-height: 20px; text-align: center; padding: 0; margin-left: 4px; }
         body.admin-mode .nav-cat-del { display: inline-block; }
         .nav-cat-del:hover { background: #cc0000; }
 
-        .admin-bar.show ~ header, .admin-bar.show ~ .search-section,
-        .admin-bar.show ~ nav, .admin-bar.show ~ main { margin-top: 50px; }
+        .admin-bar.show ~ header, .admin-bar.show ~ .search-section, .admin-bar.show ~ nav, .admin-bar.show ~ main { margin-top: 50px; }
 
         main { max-width: 1200px; margin: 0 auto; padding: 30px 20px; }
         .cakes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; }
@@ -97,19 +73,14 @@
         }
         body.admin-mode .cake-card .delete-btn { display: block; }
 
+        /* ИСПРАВЛЕНИЕ: Центрирование смайлика */
         .cake-image {
             width: 100%; height: 200px; background: #e8d5c4;
             display: flex; align-items: center; justify-content: center;
             overflow: hidden; position: relative;
         }
         .cake-image img { width: 100%; height: 100%; object-fit: cover; }
-        
-        /* ИСПРАВЛЕНИЕ: Смайлик ровно по центру */
-      .cake-image .no-image {
-    font-size: 3rem; color: #aaa;
-    display: flex; align-items: center; justify-content: center;
-    width: 100%; height: 100%;
-}
+        .cake-image .no-image { font-size: 3rem; color: #aaa; } /* Flex наследуется от родителя */
 
         .cake-info { padding: 20px; }
         .cake-category { font-size: 0.8rem; color: #888; text-transform: uppercase; margin-bottom: 8px; letter-spacing: 1px; }
@@ -119,49 +90,68 @@
 
         footer { background: #111; color: #ccc; padding: 30px 20px; text-align: center; }
 
-        /* Слайдер детальной карточки */
+        /* Слайдер */
         .slider-btn {
             position: absolute; top: 50%; transform: translateY(-50%);
             background: rgba(0,0,0,0.5); color: #fff; border: none;
-            padding: 10px 15px; cursor: pointer; font-size: 1.5rem;
-            border-radius: 5px; z-index: 5; transition: background 0.3s;
+            padding: 5px 10px; cursor: pointer; font-size: 1.2rem;
+            border-radius: 3px; z-index: 5; transition: background 0.3s;
         }
         .slider-btn:hover { background: rgba(0,0,0,0.8); }
-        .slider-prev { left: 10px; }
-        .slider-next { right: 10px; }
-        .slider-dots { position: absolute; bottom: 15px; width: 100%; text-align: center; }
+        .slider-prev { left: 5px; }
+        .slider-next { right: 5px; }
+        .slider-dots { position: absolute; bottom: 8px; width: 100%; text-align: center; }
         .slider-dots span {
-            display: inline-block; width: 10px; height: 10px; margin: 0 4px;
+            display: inline-block; width: 8px; height: 8px; margin: 0 3px;
             background: rgba(255,255,255,0.5); border-radius: 50%; cursor: pointer; transition: background 0.3s;
         }
         .slider-dots span.active { background: #fff; }
 
-        /* Сортировка фото в админке */
-        .sort-btn {
-            background: #333; color: #fff; border: none; width: 25px; height: 25px;
-            border-radius: 50%; cursor: pointer; font-size: 0.9rem; margin: 0 2px;
-        }
+        /* Сортировка фото */
+        .sort-btn { background: #333; color: #fff; border: none; width: 25px; height: 25px; border-radius: 50%; cursor: pointer; font-size: 0.9rem; margin: 0 2px; }
         .sort-btn:hover { background: #111; }
         .image-preview-item { position: relative; display: inline-block; margin: 5px; }
         .image-preview-item img { width: 80px; height: 80px; object-fit: cover; border-radius: 8px; }
-        .image-preview-item .remove-img {
-            position: absolute; top: -5px; right: -5px; background: #ff4444; color: #fff;
-            border: none; width: 20px; height: 20px; border-radius: 50%; cursor: pointer; font-size: 0.7rem;
+        .image-preview-item .remove-img { position: absolute; top: -5px; right: -5px; background: #ff4444; color: #fff; border: none; width: 20px; height: 20px; border-radius: 50%; cursor: pointer; font-size: 0.7rem; }
+
+        /* Детальная карточка (Весь экран) */
+        .detail-modal {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(0,0,0,0.85); z-index: 2000;
+            display: none; justify-content: center; align-items: center;
         }
+        .detail-modal.show { display: flex; }
+        .detail-content-wrapper { background: #fff; width: 100%; height: 100%; overflow-y: auto; position: relative; }
+        .detail-header {
+            position: sticky; top: 0; background: #fff; padding: 15px 20px;
+            border-bottom: 1px solid #eee; display: flex; align-items: center; z-index: 10;
+        }
+        .detail-close-btn {
+            background: #111; color: #fff; border: none; padding: 10px 20px;
+            border-radius: 5px; cursor: pointer; font-size: 1rem; margin-right: auto; /* Слева */
+        }
+        .detail-body { display: flex; gap: 30px; flex-wrap: wrap; padding: 20px; }
+        .detail-image { flex: 1; min-width: 300px; position: relative; }
+        .detail-image img { width: 100%; border-radius: 15px; max-height: 70vh; object-fit: cover; }
+        .detail-image .no-image { height: 300px; background: #e8d5c4; display: flex; align-items: center; justify-content: center; border-radius: 15px; font-size: 3rem; }
+        .detail-info { flex: 1; min-width: 250px; }
+        .detail-price { font-size: 2rem; color: #111; font-weight: bold; margin: 15px 0; }
+        .detail-fill { margin: 10px 0; color: #666; }
+        .detail-fill strong { color: #111; }
+
+        .similar-cakes { margin-top: 30px; width: 100%; }
+        .similar-cakes h3 { color: #111; margin-bottom: 15px; }
+        .similar-grid { display: flex; gap: 15px; overflow-x: auto; padding-bottom: 10px; }
+        .similar-item { min-width: 150px; text-align: center; cursor: pointer; }
+        .similar-item img { width: 100%; height: 100px; object-fit: cover; border-radius: 10px; }
+        .similar-item .no-image { height: 100px; background: #e8d5c4; display: flex; align-items: center; justify-content: center; border-radius: 10px; font-size: 2rem; }
+        .similar-item p { font-size: 0.8rem; margin-top: 5px; color: #111; }
 
         /* Чат */
         .chat-widget { position: fixed; bottom: 20px; right: 20px; z-index: 9999; }
-        .chat-toggle {
-            background: #111; color: #fff; border: none; padding: 12px 20px; border-radius: 25px;
-            cursor: pointer; display: flex; align-items: center; gap: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15); font-size: 0.9rem;
-        }
+        .chat-toggle { background: #111; color: #fff; border: none; padding: 12px 20px; border-radius: 25px; cursor: pointer; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); font-size: 0.9rem; }
         .chat-toggle .status-dot { width: 8px; height: 8px; background: #4CAF50; border-radius: 50%; display: inline-block; }
-        .chat-window {
-            display: none; position: absolute; bottom: 60px; right: 0;
-            width: 400px; height: 500px; background: #fff; border-radius: 15px;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.2); flex-direction: column; overflow: hidden;
-        }
+        .chat-window { display: none; position: absolute; bottom: 60px; right: 0; width: 400px; height: 500px; background: #fff; border-radius: 15px; box-shadow: 0 8px 30px rgba(0,0,0,0.2); flex-direction: column; overflow: hidden; }
         .chat-window.open { display: flex; }
         .chat-header { background: #111; color: #fff; padding: 15px; display: flex; justify-content: space-between; align-items: center; }
         .chat-header h3 { font-size: 1rem; font-weight: 400; }
@@ -193,46 +183,6 @@
         .modal-buttons button { flex: 1; padding: 12px; border: none; border-radius: 8px; font-size: 1rem; cursor: pointer; }
         .submit-btn { background: #111; color: #fff; }
         .close-btn { background: #eee; color: #333; }
-
-        /* ДЕТАЛЬНАЯ КАРТОЧКА НА ВЕСЬ ЭКРАН */
-        .detail-modal {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(0,0,0,0.85); z-index: 2000;
-            display: none; justify-content: center; align-items: center;
-        }
-        .detail-modal.show { display: flex; }
-        .detail-content-wrapper {
-            background: #fff; width: 100%; height: 100%;
-            overflow-y: auto; position: relative;
-        }
-        .detail-header {
-            position: sticky; top: 0; background: #fff; padding: 15px 20px;
-            border-bottom: 1px solid #eee; z-index: 10;
-            display: flex; align-items: center;
-        }
-        .detail-close-btn {
-            background: #111; color: #fff; border: none; padding: 10px 20px;
-            border-radius: 5px; cursor: pointer; font-size: 1rem;
-            /* Кнопка слева сверху */
-            margin-right: auto; 
-        }
-        .detail-body { display: flex; gap: 30px; flex-wrap: wrap; padding: 20px; }
-        .detail-image { flex: 1; min-width: 300px; position: relative; }
-        .detail-image img { width: 100%; border-radius: 15px; max-height: 70vh; object-fit: cover; }
-        .detail-image .no-image { height: 300px; background: #e8d5c4; display: flex; align-items: center; justify-content: center; border-radius: 15px; font-size: 3rem; }
-        .detail-info { flex: 1; min-width: 250px; }
-        .detail-price { font-size: 2rem; color: #111; font-weight: bold; margin: 15px 0; }
-        .detail-fill { margin: 10px 0; color: #666; }
-        .detail-fill strong { color: #111; }
-
-        .similar-cakes { margin-top: 30px; width: 100%; }
-        .similar-cakes h3 { color: #111; margin-bottom: 15px; }
-        .similar-grid { display: flex; gap: 15px; overflow-x: auto; padding-bottom: 10px; }
-        .similar-item { min-width: 150px; text-align: center; cursor: pointer; }
-        .similar-item img { width: 100%; height: 100px; object-fit: cover; border-radius: 10px; }
-        .similar-item .no-image { height: 100px; background: #e8d5c4; display: flex; align-items: center; justify-content: center; border-radius: 10px; font-size: 2rem; }
-        .similar-item p { font-size: 0.8rem; margin-top: 5px; color: #111; }
-
         .add-cake-modal input[type="file"] { display: none; }
         .upload-btn { background: #4CAF50; color: #fff; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; display: inline-block; margin-bottom: 10px; }
         .loading { text-align: center; padding: 40px; color: #666; }
@@ -246,7 +196,6 @@
     <button class="admin-btn" onclick="showLogin()" style="position:fixed;top:15px;right:15px;background:#666;color:#fff;border:none;padding:8px 15px;border-radius:5px;cursor:pointer;font-size:0.9rem;z-index:200;">Админ</button>
 
     <header>
-        <!-- Возвращенные SVG завитушки -->
         <svg class="header-swirls" viewBox="0 0 1200 160" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
             <g stroke="#ffffff" stroke-width="1.2" fill="none" opacity="0.18">
                 <path d="M-10,80 C20,60 40,90 60,70 C80,50 100,80 120,65 C140,50 155,70 170,60"/>
@@ -309,7 +258,7 @@
     <div class="chat-widget" id="chat-widget">
         <div class="chat-window" id="chat-window">
             <div class="chat-header">
-                <h3 id="chat-title">Напишите нам</h3>
+                <h3 id="chat-title">Напишите нам, мы онлайн</h3>
                 <button class="chat-close" onclick="toggleChat()">×</button>
             </div>
             <div class="chat-layout">
@@ -317,12 +266,12 @@
                 <div class="chat-messages" id="chat-messages"></div>
             </div>
             <div class="chat-input-area">
-                <input type="text" id="chat-input" placeholder="Сообщение..." onkeydown="if(event.key==='Enter')sendMessage()">
+                <input type="text" id="chat-input" placeholder="Ваше сообщение..." onkeydown="if(event.key==='Enter')sendMessage()">
                 <button onclick="sendMessage()">Отправить</button>
             </div>
         </div>
         <button class="chat-toggle" id="chat-toggle" onclick="toggleChat()">
-            <span class="status-dot"></span> Чат
+            <span class="status-dot"></span> Чат с поддержкой
             <span class="chat-unread" id="unread-count" style="display:none;">0</span>
         </button>
     </div>
@@ -424,7 +373,9 @@
             for (let j = 0; j <= a.length; j++) matrix[0][j] = j;
             for (let i = 1; i <= b.length; i++) {
                 for (let j = 1; j <= a.length; j++) {
-                    matrix[i][j] = (b[i-1] === a[j-1]) ? matrix[i-1][j-1] : Math.min(matrix[i-1][j-1] + 1, matrix[i][j-1] + 1, matrix[i-1][j] + 1);
+                    matrix[i][j] = (b[i-1] === a[j-1]) 
+                        ? matrix[i-1][j-1] 
+                        : Math.min(matrix[i-1][j-1] + 1, matrix[i][j-1] + 1, matrix[i-1][j] + 1);
                 }
             }
             return matrix[b.length][a.length];
@@ -432,7 +383,8 @@
 
         function fuzzyMatch(query, text, maxErrors = 2) {
             if (!query || !text) return false;
-            query = query.toLowerCase().trim(); text = text.toLowerCase().trim();
+            query = query.toLowerCase().trim();
+            text = text.toLowerCase().trim();
             if (text.includes(query)) return true;
             const queryWords = query.split(/\s+/).filter(w => w.length > 0);
             const textWords = text.split(/\s+/).filter(w => w.length > 0);
@@ -452,8 +404,14 @@
                 unreadCount = 0;
                 document.getElementById('unread-count').style.display = 'none';
                 loadMessages();
-                if (isAdmin) { document.getElementById('chat-users-list').classList.add('show'); loadUserList(); }
-                chatRefreshInterval = setInterval(() => { loadMessages(); if (isAdmin) loadUserList(); }, 3000);
+                if (isAdmin) {
+                    document.getElementById('chat-users-list').classList.add('show');
+                    loadUserList();
+                }
+                chatRefreshInterval = setInterval(() => {
+                    loadMessages();
+                    if (isAdmin) loadUserList();
+                }, 3000);
             } else {
                 if (chatRefreshInterval) clearInterval(chatRefreshInterval);
             }
@@ -482,7 +440,14 @@
 
         async function loadMessages() {
             try {
-                let url = isAdmin && selectedUserId ? '/api/chat?user_id=' + selectedUserId : (isAdmin ? '/api/chat?all=1' : '/api/chat?user_id=' + userId);
+                let url;
+                if (isAdmin && selectedUserId) {
+                    url = '/api/chat?user_id=' + selectedUserId;
+                } else if (isAdmin) {
+                    url = '/api/chat?all=1';
+                } else {
+                    url = '/api/chat?user_id=' + userId;
+                }
                 const res = await fetch(url);
                 const msgs = await res.json();
                 renderMessages(msgs);
@@ -506,11 +471,17 @@
             const text = input.value.trim();
             if (!text) return;
             const msg = {
-                sender: isAdmin ? 'admin' : 'user', message: text, is_admin: isAdmin,
+                sender: isAdmin ? 'admin' : 'user',
+                message: text,
+                is_admin: isAdmin,
                 user_id: isAdmin ? 'admin' : userId,
                 recipient_id: (isAdmin && selectedUserId) ? selectedUserId : null
             };
-            await fetch('/api/chat', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(msg) });
+            await fetch('/api/chat', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(msg)
+            });
             input.value = '';
             loadMessages();
         }
@@ -518,7 +489,12 @@
         setInterval(() => {
             if (isAdmin && !chatOpen) {
                 fetch('/api/chat?unread=1').then(r => r.json()).then(data => {
-                    if (data.count > 0) { unreadCount = data.count; const el = document.getElementById('unread-count'); el.textContent = unreadCount; el.style.display = 'inline'; }
+                    if (data.count > 0) {
+                        unreadCount = data.count;
+                        const el = document.getElementById('unread-count');
+                        el.textContent = unreadCount;
+                        el.style.display = 'inline';
+                    }
                 });
             }
         }, 5000);
@@ -526,13 +502,19 @@
         // Основные функции
         async function loadData() {
             try {
-                const [cakesRes, categoriesRes] = await Promise.all([ fetch('/api/cakes'), fetch('/api/categories') ]);
+                const [cakesRes, categoriesRes] = await Promise.all([
+                    fetch('/api/cakes'),
+                    fetch('/api/categories')
+                ]);
                 cakes = await cakesRes.json();
                 categories = await categoriesRes.json();
                 document.getElementById('loading').style.display = 'none';
                 document.getElementById('cakes-grid').style.display = 'grid';
-                renderNav(); renderCakes();
-            } catch (error) { document.getElementById('loading').textContent = 'Ошибка загрузки данных'; }
+                renderNav();
+                renderCakes();
+            } catch (error) {
+                document.getElementById('loading').textContent = 'Ошибка загрузки данных';
+            }
         }
 
         function renderNav() {
@@ -544,35 +526,47 @@
                 html += '<button class="nav-cat-del" onclick="deleteCategory(\'' + key + '\')">×</button>';
                 html += '</span>';
             }
-            if (isAdmin) html += '<button class="add-cat-btn" onclick="showAddCategory()">+</button>';
+            if (isAdmin) {
+                html += '<button class="add-cat-btn" onclick="showAddCategory()">+</button>';
+            }
             nav.innerHTML = html;
+
             const activeBtn = nav.querySelector('[data-category="' + currentFilter + '"]') || nav.querySelector('[data-category="all"]');
             if (activeBtn) activeBtn.classList.add('active');
+
             nav.querySelectorAll('button').forEach(btn => {
                 btn.addEventListener('click', () => {
                     if (btn.classList.contains('add-cat-btn') || btn.classList.contains('nav-cat-del')) return;
                     nav.querySelectorAll('button').forEach(b => b.classList.remove('active'));
                     btn.classList.add('active');
-                    currentFilter = btn.dataset.category || "all"; renderCakes();
+                    currentFilter = btn.dataset.category || "all";
+                    renderCakes();
                 });
             });
         }
 
-        // Рендер карточек (ТОЛЬКО фото или смайлик, без слайдера)
+        // Рендер карточек (ТОЛЬКО фото или 🎂, без слайдера)
         function renderCakes() {
             const grid = document.getElementById('cakes-grid');
             let filtered = cakes;
-            if (currentFilter !== "all") filtered = filtered.filter(c => c.category === currentFilter);
+            if (currentFilter !== "all") {
+                filtered = filtered.filter(c => c.category === currentFilter);
+            }
             if (searchQuery) {
                 filtered = filtered.filter(c => {
-                    return fuzzyMatch(searchQuery, c.name) || fuzzyMatch(searchQuery, c.description || c.desc) || fuzzyMatch(searchQuery, categories[c.category] || c.category);
+                    const name = c.name || '';
+                    const desc = c.description || c.desc || '';
+                    const catName = categories[c.category] || c.category || '';
+                    return fuzzyMatch(searchQuery, name) || fuzzyMatch(searchQuery, desc) || fuzzyMatch(searchQuery, catName);
                 });
             }
+
             let html = "";
             if (isAdmin) {
                 const cat = currentFilter === "all" ? "" : currentFilter;
-                html += '<div class="add-card-btn" onclick="showAddCake(\'' + cat + '\')"><span>+</span><span style="font-size:1rem;margin-top:10px;">Добавить</span></div>';
+                html += '<div class="add-card-btn" onclick="showAddCake(\'' + cat + '\')"><span>+</span><span style="font-size:1rem;margin-top:10px;">Добавить торт</span></div>';
             }
+
             filtered.forEach((cake, index) => {
                 const desc = cake.description || cake.desc || '';
                 const catName = categories[cake.category] || cake.category;
@@ -581,11 +575,13 @@
                 html += '<div class="cake-card" style="animation-delay: ' + (0.05 * (index + 1)) + 's" onclick="showDetail(' + cake.id + ')">';
                 html += '<button class="delete-btn" onclick="event.stopPropagation();deleteCake(' + cake.id + ')">×</button>';
                 html += '<div class="cake-image">';
+                
                 if (images.length > 0) {
                     html += '<img src="' + images[0] + '" alt="' + cake.name + '">';
                 } else {
                     html += '<span class="no-image">🎂</span>';
                 }
+                
                 html += '</div>';
                 html += '<div class="cake-info">';
                 html += '<div class="cake-category">' + catName + '</div>';
@@ -594,6 +590,7 @@
                 html += '<div class="cake-price">' + cake.price.toLocaleString() + ' ₽</div>';
                 html += '</div></div>';
             });
+
             grid.innerHTML = html;
         }
 
@@ -607,7 +604,9 @@
             const similarList = cake.similar_ids || cake.similar || [];
             const similar = similarList.map(sid => cakes.find(c => c.id === sid)).filter(Boolean);
             const images = cake.images && cake.images.length > 0 ? cake.images : (cake.image ? [cake.image] : []);
+            
             window.detailImageArrays[cake.id] = images;
+            window.detailCurrentIndex[cake.id] = 0;
 
             let contentHtml = '';
             contentHtml += '<div class="detail-image">';
@@ -617,7 +616,9 @@
                     contentHtml += '<button class="slider-btn slider-prev" onclick="slideDetailImage(' + cake.id + ', -1)">◄</button>';
                     contentHtml += '<button class="slider-btn slider-next" onclick="slideDetailImage(' + cake.id + ', 1)">►</button>';
                     contentHtml += '<div class="slider-dots" id="detail-dots-' + cake.id + '">';
-                    images.forEach((_, i) => { contentHtml += '<span class="' + (i === 0 ? 'active' : '') + '" onclick="goToDetailImage(' + cake.id + ', ' + i + ')"></span>'; });
+                    images.forEach((_, i) => {
+                        contentHtml += '<span class="' + (i === 0 ? 'active' : '') + '" onclick="goToDetailImage(' + cake.id + ', ' + i + ')"></span>';
+                    });
                     contentHtml += '</div>';
                 }
             } else {
@@ -634,21 +635,25 @@
 
             if (similar.length > 0) {
                 contentHtml += '<div class="similar-cakes">';
-                contentHtml += '<h3>Похожие варианты</h3><div class="similar-grid">';
+                contentHtml += '<h3>Похожие варианты</h3>';
+                contentHtml += '<div class="similar-grid">';
                 similar.forEach(s => {
                     contentHtml += '<div class="similar-item" onclick="showDetail(' + s.id + ')">';
                     const sImg = s.images && s.images.length > 0 ? s.images[0] : (s.image || '');
-                    if (sImg) { contentHtml += '<img src="' + sImg + '" alt="' + s.name + '">'; } 
-                    else { contentHtml += '<div class="no-image"><span style="font-size:2rem;">🎂</span></div>'; }
+                    if (sImg) {
+                        contentHtml += '<img src="' + sImg + '" alt="' + s.name + '">';
+                    } else {
+                        contentHtml += '<div class="no-image"><span style="font-size:2rem;">🎂</span></div>';
+                    }
                     contentHtml += '<p>' + s.name + '</p></div>';
                 });
                 contentHtml += '</div></div>';
             }
+
             document.getElementById('detail-content').innerHTML = contentHtml;
             document.getElementById('detail-modal').classList.add('show');
         }
 
-        // Слайдер детальной карточки
         function slideDetailImage(id, direction) {
             const images = window.detailImageArrays[id] || [];
             if (!images.length) return;
@@ -657,11 +662,15 @@
             if (current < 0) current = images.length - 1;
             if (current >= images.length) current = 0;
             window.detailCurrentIndex[id] = current;
+            
             const imgEl = document.getElementById('detail-img-' + id);
             if (imgEl) imgEl.src = images[current];
+            
             const dotsContainer = document.getElementById('detail-dots-' + id);
             if (dotsContainer) {
-                dotsContainer.querySelectorAll('span').forEach((dot, i) => { dot.className = i === current ? 'active' : ''; });
+                dotsContainer.querySelectorAll('span').forEach((dot, i) => {
+                    dot.className = i === current ? 'active' : '';
+                });
             }
         }
 
@@ -669,21 +678,24 @@
             const images = window.detailImageArrays[id] || [];
             if (!images.length || index >= images.length) return;
             window.detailCurrentIndex[id] = index;
-            const imgEl = document.getElementById('detail-img-' + id);
-            if (imgEl) imgEl.src = images[index];
-            const dotsContainer = document.getElementById('detail-dots-' + id);
-            if (dotsContainer) {
-                dotsContainer.querySelectorAll('span').forEach((dot, i) => { dot.className = i === index ? 'active' : ''; });
-            }
+            slideDetailImage(id, 0);
         }
 
-        function closeDetail() { document.getElementById('detail-modal').classList.remove('show'); currentDetailCake = null; }
-        
+        function closeDetail() {
+            document.getElementById('detail-modal').classList.remove('show');
+            currentDetailCake = null;
+        }
+
         function showLogin() { document.getElementById('login-modal').classList.add('show'); }
         function closeLogin() { document.getElementById('login-modal').classList.remove('show'); }
         
         function checkPassword() { 
-            if (document.getElementById('admin-password').value === '1698') { closeLogin(); loginAdmin(); } else alert('Неверный пароль!'); 
+            if (document.getElementById('admin-password').value === '1698') { 
+                closeLogin(); 
+                loginAdmin(); 
+            } else { 
+                alert('Неверный пароль!'); 
+            } 
         }
         
         function loginAdmin() {
@@ -691,7 +703,8 @@
             document.body.classList.add('admin-mode');
             document.getElementById('admin-bar').classList.add('show');
             localStorage.setItem('isAdmin', 'true');
-            renderCakes(); renderNav();
+            renderCakes();
+            renderNav();
         }
         
         function logoutAdmin() {
@@ -699,29 +712,52 @@
             document.body.classList.remove('admin-mode');
             document.getElementById('admin-bar').classList.remove('show');
             localStorage.removeItem('isAdmin');
-            renderCakes(); renderNav();
+            renderCakes();
+            renderNav();
         }
 
         async function deleteCake(id) {
             if (!confirm('Удалить торт?')) return;
             const res = await fetch('/api/cakes/' + id + '?admin_pass=1698', { method: 'DELETE' });
-            if (res.ok) { cakes = cakes.filter(c => c.id !== id); renderCakes(); }
+            if (res.ok) {
+                cakes = cakes.filter(c => c.id !== id);
+                renderCakes();
+            }
         }
 
-        function showAddCategory() { document.getElementById('new-category-name').value = ''; document.getElementById('new-category-key').value = ''; document.getElementById('add-category-modal').classList.add('show'); }
+        function showAddCategory() {
+            document.getElementById('new-category-name').value = '';
+            document.getElementById('new-category-key').value = '';
+            document.getElementById('add-category-modal').classList.add('show');
+        }
         function closeAddCategory() { document.getElementById('add-category-modal').classList.remove('show'); }
+        
         async function addCategory() {
             const name = document.getElementById('new-category-name').value.trim();
             const cat_key = document.getElementById('new-category-key').value.trim();
             if (!name || !cat_key) { alert('Заполни оба поля'); return; }
-            const res = await fetch('/api/categories', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ cat_key, name, admin_pass: '1698' }) });
-            if (res.ok) { categories[cat_key] = name; renderNav(); closeAddCategory(); } else alert('Ошибка');
+            const res = await fetch('/api/categories', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ cat_key, name, admin_pass: '1698' })
+            });
+            if (res.ok) {
+                categories[cat_key] = name;
+                renderNav();
+                closeAddCategory();
+            } else {
+                alert('Ошибка');
+            }
         }
 
         async function deleteCategory(cat_key) {
             if (!confirm('Удалить категорию?')) return;
             const res = await fetch('/api/categories/' + cat_key + '?admin_pass=1698', { method: 'DELETE' });
-            if (res.ok) { delete categories[cat_key]; renderNav(); renderCakes(); }
+            if (res.ok) {
+                delete categories[cat_key];
+                renderNav();
+                renderCakes();
+            }
         }
 
         function showAddCake(category) {
@@ -742,7 +778,10 @@
             if (!files.length) return;
             Array.from(files).forEach(file => {
                 const reader = new FileReader();
-                reader.onload = function(e) { tempImages.push({ data: e.target.result }); renderImagePreviews(); };
+                reader.onload = function(e) {
+                    tempImages.push({ data: e.target.result, file: file });
+                    renderImagePreviews();
+                };
                 reader.readAsDataURL(file);
             });
             document.getElementById('new-cake-image-input').value = '';
@@ -766,7 +805,11 @@
             });
         }
 
-        function removeImage(index) { tempImages.splice(index, 1); renderImagePreviews(); }
+        function removeImage(index) {
+            tempImages.splice(index, 1);
+            renderImagePreviews();
+        }
+
         function moveImage(index, direction) {
             const newIndex = index + direction;
             if (newIndex < 0 || newIndex >= tempImages.length) return;
@@ -784,13 +827,23 @@
 
             if (!name || price <= 0) { alert('Заполни название и цену'); return; }
             const res = await fetch('/api/cakes', {
-                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ name, category, description, fill, price, images })
             });
-            if (res.ok) { cakes.push(await res.json()); renderCakes(); closeAddCake(); } else alert('Ошибка');
+            if (res.ok) {
+                cakes.push(await res.json());
+                renderCakes();
+                closeAddCake();
+            } else {
+                alert('Ошибка');
+            }
         }
 
-        document.getElementById('search-input').addEventListener('input', function() { searchQuery = this.value.trim(); renderCakes(); });
+        document.getElementById('search-input').addEventListener('input', function() {
+            searchQuery = this.value.trim();
+            renderCakes();
+        });
         
         loadData();
     </script>
