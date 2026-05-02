@@ -867,16 +867,51 @@
         
         loadData();
     </script>
-    // Ловим ошибки загрузки картинок
-document.addEventListener('error', function(e) {
-    if (e.target.tagName === 'IMG') {
-        e.target.style.display = 'none';
-        // Показываем смайлик рядом
-        const noImage = document.createElement('span');
-        noImage.className = 'no-image';
-        noImage.textContent = '🎂';
-        e.target.parentNode.appendChild(noImage);
+   function renderCakes() {
+    const grid = document.getElementById('cakes-grid');
+    let filtered = cakes;
+    if (currentFilter !== "all") filtered = filtered.filter(c => c.category === currentFilter);
+    if (searchQuery) {
+        filtered = filtered.filter(c => {
+            return fuzzyMatch(searchQuery, c.name) || fuzzyMatch(searchQuery, c.description || c.desc) || fuzzyMatch(searchQuery, categories[c.category] || c.category);
+        });
     }
-}, true); // Используем capture, чтобы поймать все ошибки
+    let html = "";
+    if (isAdmin) {
+        const cat = currentFilter === "all" ? "" : currentFilter;
+        html += '<div class="add-card-btn" onclick="showAddCake(\'' + cat + '\')"><span>+</span><span style="font-size:1rem;margin-top:10px;">Добавить</span></div>';
+    }
+    filtered.forEach((cake, index) => {
+        const desc = cake.description || cake.desc || '';
+        const catName = categories[cake.category] || cake.category;
+        
+        // БЕРЕМ ПЕРВУЮ КАРТИНКУ
+        const rawImg = (cake.images && cake.images.length > 0) ? cake.images[0] : (cake.image || '');
+        
+        // ПРОВЕРКА: Это нормальная ссылка или base64?
+        const isValidImage = rawImg && (rawImg.startsWith('http') || rawImg.startsWith('data:image'));
+        
+        html += '<div class="cake-card" style="animation-delay: ' + (0.05 * (index + 1)) + 's" onclick="showDetail(' + cake.id + ')">';
+        html += '<button class="delete-btn" onclick="event.stopPropagation();deleteCake(' + cake.id + ')">×</button>';
+        html += '<div class="cake-image">';
+        
+        if (isValidImage) {
+            // Если ссылка нормальная - грузим
+            html += '<img src="' + rawImg + '" alt="' + cake.name + '" onerror="this.onerror=null;this.style.display=\'none\';this.parentNode.innerHTML+=\'<span class=\\\'no-image\\\'>🎂</span>\';">';
+        } else {
+            // Если ссылка кривая - сразу смайлик
+            html += '<span class="no-image">🎂</span>';
+        }
+        
+        html += '</div>';
+        html += '<div class="cake-info">';
+        html += '<div class="cake-category">' + catName + '</div>';
+        html += '<h3 class="cake-name">' + cake.name + '</h3>';
+        html += '<p class="cake-desc">' + desc + '</p>';
+        html += '<div class="cake-price">' + cake.price.toLocaleString() + ' ₽</div>';
+        html += '</div></div>';
+    });
+    grid.innerHTML = html;
+}
 </body>
 </html>
