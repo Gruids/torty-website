@@ -10,7 +10,8 @@
 
         .admin-bar {
             display: none;
-            position: fixed; top:0; left:0; width:100%;
+            position: fixed;
+            top: 0; left: 0; width: 100%;
             padding: 10px 20px; background: #333;
             justify-content: space-between; align-items: center; z-index: 300;
         }
@@ -18,177 +19,223 @@
         .admin-bar span { color: #fff; font-size: 0.9rem; }
         .admin-close-btn { background: #ff4444; color: #fff; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; }
 
-        .search-section { background: #fff; padding: 15px 20px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .search-section {
+            background: #fff; padding: 15px 20px; text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
         .search-container { display: inline-flex; align-items: center; gap: 5px; }
-        .search-container input { padding: 8px 12px; border: 1px solid #ddd; border-radius: 20px; font-size: 0.9rem; outline: none; width: 250px; transition: border-color 0.3s; }
+        .search-container input {
+            padding: 8px 12px; border: 1px solid #ddd; border-radius: 20px;
+            font-size: 0.9rem; outline: none; width: 250px; transition: border-color 0.3s;
+        }
         .search-container input:focus { border-color: #111; }
         .search-btn { background: none; border: none; cursor: pointer; font-size: 1.2rem; padding: 0 8px; outline: none; }
 
-        header { background: #111111; padding:0; text-align: center; position: relative; overflow: hidden; animation: headerAnim 1s ease; }
+        header {
+            background: #111111; padding: 0; text-align: center; position: relative;
+            overflow: hidden; animation: headerAnim 1s ease;
+        }
         @keyframes headerAnim { from { transform: translateY(-100%); } to { transform: translateY(0); } }
-        .header-inner { position: relative; z-index:2; padding: 40px 20px 35px; }
-        .header-swirls { position: absolute; top:0; left:0; width:100%; height:100%; pointer-events: none; z-index:1; }
-        h1 { font-size: 2.5rem; color: #ffffff; margin-bottom:10px; font-weight:300; letter-spacing:4px; text-transform: uppercase; }
-        .subtitle { color: #aaaaaa; font-size:1rem; letter-spacing:2px; }
+        .header-inner { position: relative; z-index: 2; padding: 40px 20px 35px; }
+        .header-swirls { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+        h1 { font-size: 2.5rem; color: #ffffff; margin-bottom: 10px; font-weight: 300; letter-spacing: 4px; text-transform: uppercase; }
+        .subtitle { color: #aaaaaa; font-size: 1rem; letter-spacing: 2px; }
 
-        nav { background: #fff; padding:15px; text-align: center; position: sticky; top:0; z-index:100; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        nav button { background: none; border: none; padding:10px 20px; margin:5px; cursor: pointer; font-size:1rem; color:#111; border-radius:25px; }
+        nav {
+            background: #fff; padding: 15px; text-align: center; position: sticky;
+            top: 0; z-index: 100; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        nav button {
+            background: none; border: none; padding: 10px 20px; margin: 5px;
+            cursor: pointer; font-size: 1rem; color: #111; border-radius: 25px;
+        }
         nav button:hover, nav button.active { background: #111; color: #fff; }
-        nav .add-cat-btn { display: none; background: #4CAF50; color:#fff; width:35px; height:35px; border-radius:50%; padding:0; line-height:35px; font-size:1.3rem; margin-left:10px; cursor: pointer; }
+        nav .add-cat-btn {
+            display: none; background: #4CAF50; color: #fff; width: 35px; height: 35px;
+            border-radius: 50%; padding: 0; line-height: 35px; font-size: 1.3rem;
+            margin-left: 10px; cursor: pointer;
+        }
         body.admin-mode nav .add-cat-btn { display: inline-block; }
-        nav .nav-cat-group { position: relative; display: inline-flex; align-items: center; margin:5px; }
-        .nav-cat-del { display: none; background: #ff4444; color:#fff; border: none; width:20px; height:20px; border-radius:50%; cursor: pointer; font-size:0.75rem; line-height:20px; text-align: center; padding:0; margin-left:4px; }
+        nav .nav-cat-group { position: relative; display: inline-flex; align-items: center; margin: 5px; }
+        .nav-cat-del {
+            display: none; background: #ff4444; color: #fff; border: none;
+            width: 20px; height: 20px; border-radius: 50%; cursor: pointer;
+            font-size: 0.75rem; line-height: 20px; text-align: center; padding: 0; margin-left: 4px;
+        }
         body.admin-mode .nav-cat-del { display: inline-block; }
         .nav-cat-del:hover { background: #cc0000; }
 
-        .admin-bar.show ~ header, .admin-bar.show ~ .search-section, .admin-bar.show ~ nav, .admin-bar.show ~ main { margin-top:50px; }
+        .admin-bar.show ~ header, .admin-bar.show ~ .search-section,
+        .admin-bar.show ~ nav, .admin-bar.show ~ main { margin-top: 50px; }
 
-        main { max-width: 1200px; margin:0 auto; padding:30px 20px; }
-        .cakes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap:25px; }
+        main { max-width: 1200px; margin: 0 auto; padding: 30px 20px; }
+        .cakes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; }
 
         .cake-card {
-            background: #fff; border-radius:15px; overflow: hidden;
+            background: #fff; border-radius: 15px; overflow: hidden;
             box-shadow: 0 3px 15px rgba(0,0,0,0.08); cursor: pointer;
             transition: transform 0.3s, box-shadow 0.3s; position: relative;
             animation: cardPop 0.5s ease backwards;
         }
-        @keyframes cardPop { from { opacity:0; transform: scale(0.8); } to { opacity:1; transform: scale(1); } }
+        @keyframes cardPop { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
         .cake-card:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(0,0,0,0.15); }
 
         .add-card-btn {
-            background: #f5f5f5; border:2px dashed #ccc; border-radius:15px;
-            cursor: pointer; transition: all 0.3s; min-height:280px;
+            background: #f5f5f5; border: 2px dashed #ccc; border-radius: 15px;
+            cursor: pointer; transition: all 0.3s; min-height: 280px;
             display: flex; flex-direction: column; align-items: center;
-            justify-content: center; color:#999; font-size:3rem;
+            justify-content: center; color: #999; font-size: 3rem;
         }
         .add-card-btn:hover { border-color: #4CAF50; color: #4CAF50; }
         body:not(.admin-mode) .add-card-btn { display: none !important; }
         body.admin-mode .add-card-btn { display: flex !important; }
 
         .cake-card .delete-btn {
-            display: none; position: absolute; top:10px; right:10px;
-            background: #ff4444; color:#fff; border: none;
-            width:32px; height:32px; border-radius:50%; cursor: pointer;
-            font-size:1.2rem; z-index:10;
+            display: none; position: absolute; top: 10px; right: 10px;
+            background: #ff4444; color: #fff; border: none; width: 32px; height: 32px;
+            border-radius: 50%; cursor: pointer; font-size: 1.2rem; z-index: 10;
         }
         body.admin-mode .cake-card .delete-btn { display: block; }
 
         .cake-image {
-            width:100%; height:200px; background: #e8d5c4;
+            width: 100%; height: 200px; background: #e8d5c4;
             display: flex; align-items: center; justify-content: center;
             overflow: hidden; position: relative;
         }
-        .cake-image img { width:100%; height:100%; object-fit: cover; }
-        .cake-image .no-image { font-size:3rem; color:#aaa; }
+        .cake-image img { width: 100%; height: 100%; object-fit: cover; }
+        
+        /* ИСПРАВЛЕНИЕ: Смайлик ровно по центру */
+        .cake-image .no-image {
+            font-size: 3rem; color: #aaa;
+            display: flex; align-items: center; justify-content: center;
+            width: 100%; height: 100%;
+        }
 
-        .cake-info { padding:20px; }
-        .cake-category { font-size:0.8rem; color:#888; text-transform: uppercase; margin-bottom:8px; letter-spacing:1px; }
-        .cake-name { font-size:1.3rem; color:#111; margin-bottom:5px; }
-        .cake-desc { color:#666; font-size:0.9rem; line-height:1.5; margin-bottom:10px; }
-        .cake-price { font-size:1.4rem; color:#111; font-weight: bold; }
+        .cake-info { padding: 20px; }
+        .cake-category { font-size: 0.8rem; color: #888; text-transform: uppercase; margin-bottom: 8px; letter-spacing: 1px; }
+        .cake-name { font-size: 1.3rem; color: #111; margin-bottom: 5px; }
+        .cake-desc { color: #666; font-size: 0.9rem; line-height: 1.5; margin-bottom: 10px; }
+        .cake-price { font-size: 1.4rem; color: #111; font-weight: bold; }
 
-        footer { background: #111; color:#ccc; padding:30px 20px; text-align: center; }
+        footer { background: #111; color: #ccc; padding: 30px 20px; text-align: center; }
 
-        /* Слайдер только для детальной карточки */
+        /* Слайдер детальной карточки */
         .slider-btn {
-            position: absolute; top:50%; transform: translateY(-50%);
-            background: rgba(0,0,0,0.5); color:#fff; border: none;
-            padding:5px 10px; cursor: pointer; font-size:1.2rem;
-            border-radius:3px; z-index:5; transition: background 0.3s;
+            position: absolute; top: 50%; transform: translateY(-50%);
+            background: rgba(0,0,0,0.5); color: #fff; border: none;
+            padding: 10px 15px; cursor: pointer; font-size: 1.5rem;
+            border-radius: 5px; z-index: 5; transition: background 0.3s;
         }
         .slider-btn:hover { background: rgba(0,0,0,0.8); }
-        .slider-prev { left:5px; }
-        .slider-next { right:5px; }
-        .slider-dots { position: absolute; bottom:8px; width:100%; text-align: center; }
+        .slider-prev { left: 10px; }
+        .slider-next { right: 10px; }
+        .slider-dots { position: absolute; bottom: 15px; width: 100%; text-align: center; }
         .slider-dots span {
-            display: inline-block; width:8px; height:8px; margin:0 3px;
-            background: rgba(255,255,255,0.5); border-radius:50%; cursor: pointer; transition: background 0.3s;
+            display: inline-block; width: 10px; height: 10px; margin: 0 4px;
+            background: rgba(255,255,255,0.5); border-radius: 50%; cursor: pointer; transition: background 0.3s;
         }
         .slider-dots span.active { background: #fff; }
 
         /* Сортировка фото в админке */
         .sort-btn {
-            background: #333; color:#fff; border: none; width:25px; height:25px;
-            border-radius:50%; cursor: pointer; font-size:0.9rem; margin:0 2px;
+            background: #333; color: #fff; border: none; width: 25px; height: 25px;
+            border-radius: 50%; cursor: pointer; font-size: 0.9rem; margin: 0 2px;
         }
         .sort-btn:hover { background: #111; }
-        .image-preview-item { position: relative; display: inline-block; margin:5px; }
-        .image-preview-item img { width:80px; height:80px; object-fit: cover; border-radius:8px; }
+        .image-preview-item { position: relative; display: inline-block; margin: 5px; }
+        .image-preview-item img { width: 80px; height: 80px; object-fit: cover; border-radius: 8px; }
         .image-preview-item .remove-img {
-            position: absolute; top:-5px; right:-5px; background: #ff4444; color:#fff;
-            border: none; width:20px; height:20px; border-radius:50%; cursor: pointer; font-size:0.7rem;
+            position: absolute; top: -5px; right: -5px; background: #ff4444; color: #fff;
+            border: none; width: 20px; height: 20px; border-radius: 50%; cursor: pointer; font-size: 0.7rem;
         }
 
         /* Чат */
-        .chat-widget { position: fixed; bottom:20px; right:20px; z-index:9999; }
+        .chat-widget { position: fixed; bottom: 20px; right: 20px; z-index: 9999; }
         .chat-toggle {
-            background: #111; color:#fff; border: none; padding:12px 20px; border-radius:25px;
-            cursor: pointer; display: flex; align-items: center; gap:8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15); font-size:0.9rem;
+            background: #111; color: #fff; border: none; padding: 12px 20px; border-radius: 25px;
+            cursor: pointer; display: flex; align-items: center; gap: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15); font-size: 0.9rem;
         }
-        .chat-toggle .status-dot { width:8px; height:8px; background: #4CAF50; border-radius:50%; display: inline-block; }
+        .chat-toggle .status-dot { width: 8px; height: 8px; background: #4CAF50; border-radius: 50%; display: inline-block; }
         .chat-window {
-            display: none; position: absolute; bottom:60px; right:0;
-            width:400px; height:500px; background: #fff; border-radius:15px;
+            display: none; position: absolute; bottom: 60px; right: 0;
+            width: 400px; height: 500px; background: #fff; border-radius: 15px;
             box-shadow: 0 8px 30px rgba(0,0,0,0.2); flex-direction: column; overflow: hidden;
         }
         .chat-window.open { display: flex; }
-        .chat-header { background: #111; color:#fff; padding:15px; display: flex; justify-content: space-between; align-items: center; }
-        .chat-header h3 { font-size:1rem; font-weight:400; }
-        .chat-close { background: none; border: none; color:#fff; font-size:1.2rem; cursor: pointer; }
-        .chat-layout { display: flex; flex:1; overflow: hidden; }
-        .chat-users-list { width:140px; background: #f5f5f5; border-right:1px solid #ddd; overflow-y: auto; display: none; }
+        .chat-header { background: #111; color: #fff; padding: 15px; display: flex; justify-content: space-between; align-items: center; }
+        .chat-header h3 { font-size: 1rem; font-weight: 400; }
+        .chat-close { background: none; border: none; color: #fff; font-size: 1.2rem; cursor: pointer; }
+        .chat-layout { display: flex; flex: 1; overflow: hidden; }
+        .chat-users-list { width: 140px; background: #f5f5f5; border-right: 1px solid #ddd; overflow-y: auto; display: none; }
         .chat-users-list.show { display: block; }
-        .chat-user-item { padding:10px; cursor: pointer; border-bottom:1px solid #eee; font-size:0.8rem; word-break: break-all; }
+        .chat-user-item { padding: 10px; cursor: pointer; border-bottom: 1px solid #eee; font-size: 0.8rem; word-break: break-all; }
         .chat-user-item:hover { background: #eee; }
         .chat-user-item.active { background: #ddd; }
-        .chat-messages { flex:1; padding:15px; overflow-y: auto; display: flex; flex-direction: column; gap:10px; }
-        .msg { max-width:80%; padding:10px 14px; border-radius:15px; font-size:0.9rem; line-height:1.4; }
-        .msg.user { background: #f0f0f0; align-self: flex-start; border-bottom-left-radius:5px; }
-        .msg.admin { background: #111; color:#fff; align-self: flex-end; border-bottom-right-radius:5px; }
-        .chat-input-area { padding:10px; border-top:1px solid #eee; display: flex; gap:8px; }
-        .chat-input-area input { flex:1; padding:8px 12px; border:1px solid #ddd; border-radius:20px; outline: none; font-size:0.9rem; }
-        .chat-input-area button { background: #111; color:#fff; border: none; padding:8px 15px; border-radius:20px; cursor: pointer; }
-        .chat-unread { background: #ff4444; color:#fff; font-size:0.7rem; padding:2px 6px; border-radius:10px; margin-left:5px; }
+        .chat-messages { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+        .msg { max-width: 80%; padding: 10px 14px; border-radius: 15px; font-size: 0.9rem; line-height: 1.4; }
+        .msg.user { background: #f0f0f0; align-self: flex-start; border-bottom-left-radius: 5px; }
+        .msg.admin { background: #111; color: #fff; align-self: flex-end; border-bottom-right-radius: 5px; }
+        .chat-input-area { padding: 10px; border-top: 1px solid #eee; display: flex; gap: 8px; }
+        .chat-input-area input { flex: 1; padding: 8px 12px; border: 1px solid #ddd; border-radius: 20px; outline: none; font-size: 0.9rem; }
+        .chat-input-area button { background: #111; color: #fff; border: none; padding: 8px 15px; border-radius: 20px; cursor: pointer; }
+        .chat-unread { background: #ff4444; color: #fff; font-size: 0.7rem; padding: 2px 6px; border-radius: 10px; margin-left: 5px; }
 
         /* Модалки */
-        .modal { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.5); z-index:1000; align-items: center; justify-content: center; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; }
         .modal.show { display: flex; }
-        .modal-content { background: #fff; padding:30px; border-radius:15px; max-width:600px; width:90%; max-height:90vh; overflow-y: auto; }
-        .modal h2 { color:#111; margin-bottom:20px; }
-        .form-group { margin-bottom:15px; }
-        .form-group label { display: block; margin-bottom:5px; color:#111; }
-        .form-group input, .form-group textarea, .form-group select { width:100%; padding:10px; border:1px solid #ddd; border-radius:8px; font-size:1rem; }
-        .modal-buttons { display: flex; gap:10px; }
-        .modal-buttons button { flex:1; padding:12px; border: none; border-radius:8px; font-size:1rem; cursor: pointer; }
-        .submit-btn { background: #111; color:#fff; }
-        .close-btn { background: #eee; color:#333; }
+        .modal-content { background: #fff; padding: 30px; border-radius: 15px; max-width: 600px; width: 90%; max-height: 90vh; overflow-y: auto; }
+        .modal h2 { color: #111; margin-bottom: 20px; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; color: #111; }
+        .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; }
+        .modal-buttons { display: flex; gap: 10px; }
+        .modal-buttons button { flex: 1; padding: 12px; border: none; border-radius: 8px; font-size: 1rem; cursor: pointer; }
+        .submit-btn { background: #111; color: #fff; }
+        .close-btn { background: #eee; color: #333; }
 
-        /* Детальная карточка на весь экран */
-        .detail-modal { 
-            max-width: 100vw; width:100%; height:100vh; max-height:100vh; 
-            border-radius:0; margin:0; padding:20px; box-sizing: border-box; 
+        /* ДЕТАЛЬНАЯ КАРТОЧКА НА ВЕСЬ ЭКРАН */
+        .detail-modal {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(0,0,0,0.85); z-index: 2000;
+            display: none; justify-content: center; align-items: center;
         }
-        .detail-content { display: flex; gap:30px; flex-wrap: wrap; height: calc(100vh - 120px); overflow-y: auto; }
-        .detail-image { flex:1; min-width:300px; position: relative; }
-        .detail-image img { width:100%; border-radius:15px; max-height: 70vh; object-fit: cover; }
-        .detail-image .no-image { height:300px; background: #e8d5c4; display: flex; align-items: center; justify-content: center; border-radius:15px; font-size:3rem; }
-        .detail-info { flex:1; min-width:250px; }
-        .detail-price { font-size:2rem; color:#111; font-weight: bold; margin:15px 0; }
-        .detail-fill { margin:10px 0; color:#666; }
-        .detail-fill strong { color:#111; }
+        .detail-modal.show { display: flex; }
+        .detail-content-wrapper {
+            background: #fff; width: 100%; height: 100%;
+            overflow-y: auto; position: relative;
+        }
+        .detail-header {
+            position: sticky; top: 0; background: #fff; padding: 15px 20px;
+            border-bottom: 1px solid #eee; z-index: 10;
+            display: flex; align-items: center;
+        }
+        .detail-close-btn {
+            background: #111; color: #fff; border: none; padding: 10px 20px;
+            border-radius: 5px; cursor: pointer; font-size: 1rem;
+            /* Кнопка слева сверху */
+            margin-right: auto; 
+        }
+        .detail-body { display: flex; gap: 30px; flex-wrap: wrap; padding: 20px; }
+        .detail-image { flex: 1; min-width: 300px; position: relative; }
+        .detail-image img { width: 100%; border-radius: 15px; max-height: 70vh; object-fit: cover; }
+        .detail-image .no-image { height: 300px; background: #e8d5c4; display: flex; align-items: center; justify-content: center; border-radius: 15px; font-size: 3rem; }
+        .detail-info { flex: 1; min-width: 250px; }
+        .detail-price { font-size: 2rem; color: #111; font-weight: bold; margin: 15px 0; }
+        .detail-fill { margin: 10px 0; color: #666; }
+        .detail-fill strong { color: #111; }
 
-        .similar-cakes { margin-top:30px; width:100%; }
-        .similar-cakes h3 { color:#111; margin-bottom:15px; }
-        .similar-grid { display: flex; gap:15px; overflow-x: auto; padding-bottom:10px; }
-        .similar-item { min-width:150px; text-align: center; cursor: pointer; }
-        .similar-item img { width:100%; height:100px; object-fit: cover; border-radius:10px; }
-        .similar-item .no-image { height:100px; background: #e8d5c4; display: flex; align-items: center; justify-content: center; border-radius:10px; font-size:2rem; }
-        .similar-item p { font-size:0.8rem; margin-top:5px; color:#111; }
+        .similar-cakes { margin-top: 30px; width: 100%; }
+        .similar-cakes h3 { color: #111; margin-bottom: 15px; }
+        .similar-grid { display: flex; gap: 15px; overflow-x: auto; padding-bottom: 10px; }
+        .similar-item { min-width: 150px; text-align: center; cursor: pointer; }
+        .similar-item img { width: 100%; height: 100px; object-fit: cover; border-radius: 10px; }
+        .similar-item .no-image { height: 100px; background: #e8d5c4; display: flex; align-items: center; justify-content: center; border-radius: 10px; font-size: 2rem; }
+        .similar-item p { font-size: 0.8rem; margin-top: 5px; color: #111; }
 
         .add-cake-modal input[type="file"] { display: none; }
-        .upload-btn { background: #4CAF50; color:#fff; border: none; padding:10px 20px; border-radius:5px; cursor: pointer; display: inline-block; margin-bottom:10px; }
-        .loading { text-align: center; padding:40px; color:#666; }
+        .upload-btn { background: #4CAF50; color: #fff; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; display: inline-block; margin-bottom: 10px; }
+        .loading { text-align: center; padding: 40px; color: #666; }
     </style>
 </head>
 <body>
@@ -199,6 +246,7 @@
     <button class="admin-btn" onclick="showLogin()" style="position:fixed;top:15px;right:15px;background:#666;color:#fff;border:none;padding:8px 15px;border-radius:5px;cursor:pointer;font-size:0.9rem;z-index:200;">Админ</button>
 
     <header>
+        <!-- Возвращенные SVG завитушки -->
         <svg class="header-swirls" viewBox="0 0 1200 160" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
             <g stroke="#ffffff" stroke-width="1.2" fill="none" opacity="0.18">
                 <path d="M-10,80 C20,60 40,90 60,70 C80,50 100,80 120,65 C140,50 155,70 170,60"/>
@@ -261,7 +309,7 @@
     <div class="chat-widget" id="chat-widget">
         <div class="chat-window" id="chat-window">
             <div class="chat-header">
-                <h3 id="chat-title">Напишите нам, мы онлайн</h3>
+                <h3 id="chat-title">Напишите нам</h3>
                 <button class="chat-close" onclick="toggleChat()">×</button>
             </div>
             <div class="chat-layout">
@@ -269,45 +317,49 @@
                 <div class="chat-messages" id="chat-messages"></div>
             </div>
             <div class="chat-input-area">
-                <input type="text" id="chat-input" placeholder="Ваше сообщение..." onkeydown="if(event.key==='Enter')sendMessage()">
+                <input type="text" id="chat-input" placeholder="Сообщение..." onkeydown="if(event.key==='Enter')sendMessage()">
                 <button onclick="sendMessage()">Отправить</button>
             </div>
         </div>
         <button class="chat-toggle" id="chat-toggle" onclick="toggleChat()">
-            <span class="status-dot"></span>
-            Чат с поддержкой
+            <span class="status-dot"></span> Чат
             <span class="chat-unread" id="unread-count" style="display:none;">0</span>
         </button>
     </div>
 
-    <!-- Модалки -->
-    <div class="modal" id="order-modal">
-        <div class="modal-content">
-            <h2>Оформить заказ</h2>
-            <form id="order-form">
-                <div class="form-group"><label>Торт</label><input type="text" id="order-cake-name" readonly></div>
-                <div class="form-group"><label>Ваше имя</label><input type="text" name="name" required></div>
-                <div class="form-group"><label>Телефон</label><input type="tel" name="phone" required></div>
-                <div class="form-group"><label>Дата</label><input type="date" name="date" required></div>
-                <div class="form-group"><label>Комментарий</label><textarea name="comment" rows="3"></textarea></div>
-                <div class="modal-buttons">
-                    <button type="button" class="close-btn" onclick="closeOrderModal()">Отмена</button>
-                    <button type="submit" class="submit-btn">Отправить</button>
-                </div>
-            </form>
+    <!-- Детальная карточка (Весь экран) -->
+    <div class="detail-modal" id="detail-modal">
+        <div class="detail-content-wrapper">
+            <div class="detail-header">
+                <button class="detail-close-btn" onclick="closeDetail()">← Закрыть</button>
+            </div>
+            <div class="detail-body" id="detail-content"></div>
         </div>
     </div>
 
-    <div class="modal" id="detail-modal">
-        <div class="modal-content detail-modal">
-            <div class="detail-content" id="detail-content"></div>
-            <div class="modal-buttons" style="margin-top:20px;">
-                <button class="submit-btn" onclick="orderFromDetail()">Заказать</button>
-                <button class="close-btn" onclick="closeDetail()">Закрыть</button>
+    <!-- Модалка добавления торта (Без кнопки заказать) -->
+    <div class="modal" id="add-cake-modal">
+        <div class="modal-content add-cake-modal">
+            <h2>Добавить торт</h2>
+            <div class="form-group">
+                <label>Фотографии (можно несколько)</label>
+                <input type="file" id="new-cake-image-input" accept="image/*" multiple onchange="previewImages()">
+                <label class="upload-btn" for="new-cake-image-input">Выбрать фото</label>
+                <div id="image-preview" style="margin-top: 10px; display: flex; flex-wrap: wrap; gap: 5px;"></div>
+            </div>
+            <div class="form-group"><label>Название</label><input type="text" id="new-cake-name"></div>
+            <div class="form-group"><label>Категория</label><select id="new-cake-category"></select></div>
+            <div class="form-group"><label>Описание</label><textarea id="new-cake-desc" rows="2"></textarea></div>
+            <div class="form-group"><label>Начинка</label><input type="text" id="new-cake-fill"></div>
+            <div class="form-group"><label>Цена (₽)</label><input type="number" id="new-cake-price"></div>
+            <div class="modal-buttons">
+                <button class="close-btn" onclick="closeAddCake()">Отмена</button>
+                <button class="submit-btn" onclick="addCake()">Добавить</button>
             </div>
         </div>
     </div>
 
+    <!-- Вход админа -->
     <div class="modal" id="login-modal">
         <div class="modal-content">
             <h2>Вход в админ</h2>
@@ -322,6 +374,7 @@
         </div>
     </div>
 
+    <!-- Добавить категорию -->
     <div class="modal" id="add-category-modal">
         <div class="modal-content">
             <h2>Добавить категорию</h2>
@@ -330,28 +383,6 @@
             <div class="modal-buttons">
                 <button class="close-btn" onclick="closeAddCategory()">Отмена</button>
                 <button class="submit-btn" onclick="addCategory()">Добавить</button>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal" id="add-cake-modal">
-        <div class="modal-content add-cake-modal">
-            <h2>Добавить торт</h2>
-            <div class="form-group">
-                <label>Фотографии (можно несколько)</label>
-                <input type="file" id="new-cake-image-input" accept="image/*" multiple onchange="previewImages()">
-                <label class="upload-btn" for="new-cake-image-input">Выбрать фото</label>
-                <div id="image-preview" style="margin-top:10px; display:flex; flex-wrap:wrap; gap:5px;"></div>
-            </div>
-            <div class="form-group"><label>Название</label><input type="text" id="new-cake-name"></div>
-            <div class="form-group"><label>Категория</label><select id="new-cake-category"></select></div>
-            <div class="form-group"><label>Описание</label><textarea id="new-cake-desc" rows="2"></textarea></div>
-            <div class="form-group"><label>Начинка</label><input type="text" id="new-cake-fill"></div>
-            <div class="form-group"><label>Цена (₽)</label><input type="number" id="new-cake-price"></div>
-            <div class="form-group"><label>Похожие (id через запятую)</label><input type="text" id="new-cake-similar" placeholder="1,2,3"></div>
-            <div class="modal-buttons">
-                <button class="close-btn" onclick="closeAddCake()">Отмена</button>
-                <button class="submit-btn" onclick="addCake()">Добавить</button>
             </div>
         </div>
     </div>
@@ -374,18 +405,16 @@
             localStorage.setItem('chat_user_id', userId);
         }
 
-        // Переменные для детального слайдера
         window.detailImageArrays = {};
         window.detailCurrentIndex = {};
 
-        // Восстановление админа
         if (localStorage.getItem('isAdmin') === 'true') {
             isAdmin = true;
             document.body.classList.add('admin-mode');
             document.getElementById('admin-bar').classList.add('show');
         }
 
-        // Поиск (Левенштейн)
+        // Алгоритм Левенштейна
         function levenshtein(a, b) {
             a = a.toLowerCase(); b = b.toLowerCase();
             if (a.length === 0) return b.length;
@@ -529,7 +558,7 @@
             });
         }
 
-        // Рендеринг карточек (БЕЗ слайдеров, только первая фото или 🎂)
+        // Рендер карточек (ТОЛЬКО фото или смайлик, без слайдера)
         function renderCakes() {
             const grid = document.getElementById('cakes-grid');
             let filtered = cakes;
@@ -542,7 +571,7 @@
             let html = "";
             if (isAdmin) {
                 const cat = currentFilter === "all" ? "" : currentFilter;
-                html += '<div class="add-card-btn" onclick="showAddCake(\'' + cat + '\')"><span>+</span><span style="font-size:1rem;margin-top:10px;">Добавить торт</span></div>';
+                html += '<div class="add-card-btn" onclick="showAddCake(\'' + cat + '\')"><span>+</span><span style="font-size:1rem;margin-top:10px;">Добавить</span></div>';
             }
             filtered.forEach((cake, index) => {
                 const desc = cake.description || cake.desc || '';
@@ -553,7 +582,7 @@
                 html += '<button class="delete-btn" onclick="event.stopPropagation();deleteCake(' + cake.id + ')">×</button>';
                 html += '<div class="cake-image">';
                 if (images.length > 0) {
-                    html += `<img src="${images[0]}" alt="${cake.name}">`;
+                    html += '<img src="' + images[0] + '" alt="' + cake.name + '">';
                 } else {
                     html += '<span class="no-image">🎂</span>';
                 }
@@ -568,7 +597,7 @@
             grid.innerHTML = html;
         }
 
-        // Детальная карточка (на весь экран, слайдер тут)
+        // Детальная карточка (Весь экран, слайдер тут)
         function showDetail(id) {
             const cake = cakes.find(c => c.id === id);
             if (!cake) return;
@@ -583,16 +612,16 @@
             let contentHtml = '';
             contentHtml += '<div class="detail-image">';
             if (images.length > 0) {
-                contentHtml += `<img src="${images[0]}" id="detail-img-${cake.id}" alt="${cake.name}" style="width:100%; border-radius:15px; max-height:70vh; object-fit:cover;">`;
+                contentHtml += '<img src="' + images[0] + '" id="detail-img-' + cake.id + '" alt="' + cake.name + '" style="width:100%; border-radius:15px; max-height:70vh; object-fit:cover;">';
                 if (images.length > 1) {
-                    contentHtml += `<button class="slider-btn slider-prev" onclick="slideDetailImage(${cake.id}, -1)">◄</button>`;
-                    contentHtml += `<button class="slider-btn slider-next" onclick="slideDetailImage(${cake.id}, 1)">►</button>`;
-                    contentHtml += `<div class="slider-dots" id="detail-dots-${cake.id}">`;
-                    images.forEach((_, i) => { contentHtml += `<span class="${i === 0 ? 'active' : ''}" onclick="goToDetailImage(${cake.id}, ${i})"></span>`; });
-                    contentHtml += `</div>`;
+                    contentHtml += '<button class="slider-btn slider-prev" onclick="slideDetailImage(' + cake.id + ', -1)">◄</button>';
+                    contentHtml += '<button class="slider-btn slider-next" onclick="slideDetailImage(' + cake.id + ', 1)">►</button>';
+                    contentHtml += '<div class="slider-dots" id="detail-dots-' + cake.id + '">';
+                    images.forEach((_, i) => { contentHtml += '<span class="' + (i === 0 ? 'active' : '') + '" onclick="goToDetailImage(' + cake.id + ', ' + i + ')"></span>'; });
+                    contentHtml += '</div>';
                 }
             } else {
-                contentHtml += '<div class="no-image" style="height:300px;background:#e8d5c4;display:flex;align-items:center;justify-content:center;border-radius:15px;font-size:3rem;">🎂</div>';
+                contentHtml += '<div class="no-image">🎂</div>';
             }
             contentHtml += '</div>';
             contentHtml += '<div class="detail-info">';
@@ -600,7 +629,7 @@
             contentHtml += '<h2 style="color: #111;">' + cake.name + '</h2>';
             contentHtml += '<p style="margin: 15px 0; color: #666;">' + desc + '</p>';
             contentHtml += '<div class="detail-price">' + cake.price.toLocaleString() + ' ₽</div>';
-            contentHtml += '<div class="detail-fill"><strong>Начинка:</strong> ' + cake.fill + '</div>';
+            contentHtml += '<div class="detail-fill"><strong>Начинка:</strong> ' + (cake.fill || '') + '</div>';
             contentHtml += '</div>';
 
             if (similar.length > 0) {
@@ -632,9 +661,7 @@
             if (imgEl) imgEl.src = images[current];
             const dotsContainer = document.getElementById('detail-dots-' + id);
             if (dotsContainer) {
-                dotsContainer.querySelectorAll('span').forEach((dot, i) => {
-                    dot.className = i === current ? 'active' : '';
-                });
+                dotsContainer.querySelectorAll('span').forEach((dot, i) => { dot.className = i === current ? 'active' : ''; });
             }
         }
 
@@ -646,14 +673,12 @@
             if (imgEl) imgEl.src = images[index];
             const dotsContainer = document.getElementById('detail-dots-' + id);
             if (dotsContainer) {
-                dotsContainer.querySelectorAll('span').forEach((dot, i) => {
-                    dot.className = i === index ? 'active' : '';
-                });
+                dotsContainer.querySelectorAll('span').forEach((dot, i) => { dot.className = i === index ? 'active' : ''; });
             }
         }
 
         function closeDetail() { document.getElementById('detail-modal').classList.remove('show'); currentDetailCake = null; }
-        function orderFromDetail() { if (currentDetailCake) { document.getElementById('order-cake-name').value = currentDetailCake.name; document.getElementById('order-modal').classList.add('show'); } }
+        
         function showLogin() { document.getElementById('login-modal').classList.add('show'); }
         function closeLogin() { document.getElementById('login-modal').classList.remove('show'); }
         
@@ -706,7 +731,6 @@
             document.getElementById('new-cake-desc').value = '';
             document.getElementById('new-cake-fill').value = '';
             document.getElementById('new-cake-price').value = '';
-            document.getElementById('new-cake-similar').value = '';
             const select = document.getElementById('new-cake-category');
             select.innerHTML = Object.entries(categories).map(([key, name]) => '<option value="' + key + '" ' + (key === category ? 'selected' : '') + '>' + name + '</option>').join('');
             document.getElementById('add-cake-modal').classList.add('show');
@@ -718,7 +742,7 @@
             if (!files.length) return;
             Array.from(files).forEach(file => {
                 const reader = new FileReader();
-                reader.onload = function(e) { tempImages.push({ data: e.target.result, file: file }); renderImagePreviews(); };
+                reader.onload = function(e) { tempImages.push({ data: e.target.result }); renderImagePreviews(); };
                 reader.readAsDataURL(file);
             });
             document.getElementById('new-cake-image-input').value = '';
@@ -756,22 +780,16 @@
             const description = document.getElementById('new-cake-desc').value.trim();
             const fill = document.getElementById('new-cake-fill').value.trim();
             const price = parseInt(document.getElementById('new-cake-price').value) || 0;
-            const similarStr = document.getElementById('new-cake-similar').value.trim();
-            const similar_ids = similarStr ? similarStr.split(',').map(s => parseInt(s.trim())).filter(n => n) : [];
             const images = tempImages.map(img => img.data);
 
             if (!name || price <= 0) { alert('Заполни название и цену'); return; }
             const res = await fetch('/api/cakes', {
                 method: 'POST', headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name, category, description, fill, price, similar_ids, images })
+                body: JSON.stringify({ name, category, description, fill, price, images })
             });
             if (res.ok) { cakes.push(await res.json()); renderCakes(); closeAddCake(); } else alert('Ошибка');
         }
 
-        function closeOrderModal() { document.getElementById('order-modal').classList.remove('show'); }
-        document.getElementById('order-form').addEventListener('submit', (e) => {
-            e.preventDefault(); alert('Заявка отправлена! Мы свяжемся с вами.'); closeOrderModal(); e.target.reset();
-        });
         document.getElementById('search-input').addEventListener('input', function() { searchQuery = this.value.trim(); renderCakes(); });
         
         loadData();
