@@ -867,5 +867,16 @@
         
         loadData();
     </script>
+    // Ловим ошибки загрузки картинок
+document.addEventListener('error', function(e) {
+    if (e.target.tagName === 'IMG') {
+        e.target.style.display = 'none';
+        // Показываем смайлик рядом
+        const noImage = document.createElement('span');
+        noImage.className = 'no-image';
+        noImage.textContent = '🎂';
+        e.target.parentNode.appendChild(noImage);
+    }
+}, true); // Используем capture, чтобы поймать все ошибки
 </body>
 </html>
